@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Postinstall script for tidy-file-organizer
+ * Postinstall script for @humayan-x/tidy
  * Downloads the precompiled native tidy binary matching the host platform/architecture
  * from GitHub Releases and places it into bin/tidy-bin.
  */

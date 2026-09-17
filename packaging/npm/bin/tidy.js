@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Runner for tidy-file-organizer
+ * Runner for @humayan-x/tidy
  * Dispatches CLI calls directly to the native compiled binary,
  * transparently piping stdin, stdout, stderr, and preserving exit codes.
  */

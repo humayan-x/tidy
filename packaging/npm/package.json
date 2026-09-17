@@ -1,5 +1,5 @@
 {
-  "name": "tidy-file-organizer",
+  "name": "@humayan-x/tidy",
   "version": "0.1.0",
   "description": "A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.",
   "bin": {

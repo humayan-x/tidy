@@ -1,4 +1,4 @@
-# tidy-file-organizer
+# @humayan-x/tidy
 
 > **A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.**
 
@@ -12,16 +12,16 @@ No installation required:
 
 ```bash
 # Organize current directory
-npx tidy-file-organizer run
+npx @humayan-x/tidy run
 
 # Organize Downloads directory with a dry-run preview (zero risk)
-npx tidy-file-organizer run --path ~/Downloads --dry-run
+npx @humayan-x/tidy run --path ~/Downloads --dry-run
 
 # Start real-time background watcher
-npx tidy-file-organizer watch --path ~/Downloads
+npx @humayan-x/tidy watch --path ~/Downloads
 
 # Undo the last operation
-npx tidy-file-organizer undo
+npx @humayan-x/tidy undo
 ```
 
 ---
@@ -29,7 +29,7 @@ npx tidy-file-organizer undo
 ## Global Installation
 
 ```bash
-npm install -g tidy-file-organizer
+npm install -g @humayan-x/tidy
 ```
 
 Once installed, use `tidy` directly:
