@@ -2,6 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/humayan-x/tidy/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen?style=flat-square&logo=githubactions" alt="CI Build Status" /></a>
+  <a href="https://www.npmjs.com/package/tidy-file-organizer"><img src="https://img.shields.io/npm/v/tidy-file-organizer?style=flat-square&logo=npm&color=CB3837" alt="npm version" /></a>
   <a href="https://github.com/humayan-x/tidy/releases"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=flat-square" alt="Version 0.1.0" /></a>
   <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue?style=flat-square" alt="License" /></a>
   <a href="https://www.rust-lang.org"><img src="https://img.shields.io/badge/rust-1.75%2B%20(2021)-orange?style=flat-square&logo=rust" alt="Rust 1.75+" /></a>

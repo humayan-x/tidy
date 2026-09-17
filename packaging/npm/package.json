@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.",
   "bin": {
-    "tidy": "./bin/tidy.js"
+    "tidy": "bin/tidy.js"
   },
   "scripts": {
-    "postinstall": "node ./bin/install.js"
+    "postinstall": "node bin/install.js"
   },
   "files": [
     "bin/",
@@ -29,7 +29,7 @@
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/humayan-x/tidy.git"
+    "url": "git+https://github.com/humayan-x/tidy.git"
   },
   "bugs": {
     "url": "https://github.com/humayan-x/tidy/issues"
