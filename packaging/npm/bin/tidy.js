@@ -27,16 +27,18 @@ if (!fs.existsSync(binaryPath)) {
 }
 
 if (!fs.existsSync(binaryPath)) {
-  console.error('[tidy] Native binary not found. Attempting on-demand download...');
+  console.error('[tidy] Native binary not found. Attempting download...');
   try {
-    require('./install.js');
+    const installScript = path.join(binDir, 'install.js');
+    const { execSync } = require('child_process');
+    execSync(`node "${installScript}"`, { stdio: 'inherit' });
   } catch (err) {
-    console.error(`[tidy] Failed to download binary: ${err.message}`);
+    console.error(`[tidy] Download error: ${err.message}`);
   }
 
   if (!fs.existsSync(binaryPath)) {
     console.error('[tidy] Error: Native binary could not be located or downloaded.');
-    console.error('[tidy] Please ensure curl/tar are available or install via:');
+    console.error('[tidy] Please install directly via:');
     console.error('       curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh');
     process.exit(1);
   }

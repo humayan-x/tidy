@@ -106,8 +106,10 @@ function downloadBinary() {
   });
 }
 
-// Only attempt install if not explicitly skipped
-if (process.env.TIDY_SKIP_BINARY_DOWNLOAD !== '1') {
+module.exports = { downloadBinary };
+
+// Only attempt install if run directly
+if (require.main === module && process.env.TIDY_SKIP_BINARY_DOWNLOAD !== '1') {
   try {
     downloadBinary();
   } catch (err) {
