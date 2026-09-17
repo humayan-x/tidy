@@ -13,7 +13,8 @@ const zlib = require('zlib');
 const { execSync } = require('child_process');
 
 const pkg = require('../package.json');
-const VERSION = pkg.version;
+// Download matching GitHub release binary (default to v0.1.0 or TIDY_VERSION override)
+const BINARY_VERSION = process.env.TIDY_VERSION || '0.1.0';
 const REPO = process.env.TIDY_REPO || 'humayan-x/tidy';
 
 function getTargetTriple() {
@@ -56,8 +57,8 @@ function downloadBinary() {
     }
   }
 
-  const tarballName = `tidy-v${VERSION}-${target}.tar.gz`;
-  const url = `https://github.com/${REPO}/releases/download/v${VERSION}/${tarballName}`;
+  const tarballName = `tidy-v${BINARY_VERSION}-${target}.tar.gz`;
+  const url = `https://github.com/${REPO}/releases/download/v${BINARY_VERSION}/${tarballName}`;
 
   console.log(`[tidy] Downloading precompiled binary from ${url}...`);
 
