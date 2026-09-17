@@ -160,15 +160,20 @@ fi
 
 # 8. Unpack and Install Binary
 mkdir -p "${TMP_DIR}/extracted"
-tar -xzf "${TMP_DIR}/${TARBALL_NAME}" -C "${TMP_DIR}/extracted"
+tar -xzf "${TMP_DIR}/${TARBALL_NAME}" -C "${TMP_DIR}/extracted" --strip-components=1 2>/dev/null || tar -xzf "${TMP_DIR}/${TARBALL_NAME}" -C "${TMP_DIR}/extracted"
 
-if [ ! -f "${TMP_DIR}/extracted/tidy" ]; then
+EXTRACTED_BIN="${TMP_DIR}/extracted/tidy"
+if [ ! -f "$EXTRACTED_BIN" ]; then
+    EXTRACTED_BIN=$(find "${TMP_DIR}/extracted" -type f -name tidy | head -n 1)
+fi
+
+if [ -z "$EXTRACTED_BIN" ] || [ ! -f "$EXTRACTED_BIN" ]; then
     log_error "Extracted archive did not contain 'tidy' binary."
     exit 1
 fi
 
 mkdir -p "$INSTALL_DIR"
-cp "${TMP_DIR}/extracted/tidy" "${INSTALL_DIR}/tidy"
+cp "$EXTRACTED_BIN" "${INSTALL_DIR}/tidy"
 chmod +x "${INSTALL_DIR}/tidy"
 
 log_success "Installed tidy to ${INSTALL_DIR}/tidy"

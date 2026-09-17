@@ -18,6 +18,22 @@ if (!fs.existsSync(binaryPath) && fs.existsSync(path.join(binDir, 'tidy'))) {
   binaryPath = path.join(binDir, 'tidy');
 }
 
+// Fallback search in extracted subdirectories if rename was skipped
+if (!fs.existsSync(binaryPath)) {
+  try {
+    const entries = fs.readdirSync(binDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isDirectory() && entry.name.startsWith('tidy-')) {
+        const nested = path.join(binDir, entry.name, 'tidy');
+        if (fs.existsSync(nested)) {
+          binaryPath = nested;
+          break;
+        }
+      }
+    }
+  } catch {}
+}
+
 // Fallback search in parent target/release if developing locally
 if (!fs.existsSync(binaryPath)) {
   const localBuild = path.resolve(binDir, '../../../target/release/tidy');

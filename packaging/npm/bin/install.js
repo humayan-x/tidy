@@ -87,13 +87,38 @@ function downloadBinary() {
     fileStream.on('finish', () => {
       fileStream.close(() => {
         try {
-          // Extract using tar
-          execSync(`tar -xzf "${tempTarball}" -C "${binDir}"`);
+          // Extract using tar (try with --strip-components=1 to avoid top-level dir)
+          try {
+            execSync(`tar -xzf "${tempTarball}" -C "${binDir}" --strip-components=1`);
+          } catch {
+            execSync(`tar -xzf "${tempTarball}" -C "${binDir}"`);
+          }
+
           if (fs.existsSync(path.join(binDir, 'tidy'))) {
             fs.renameSync(path.join(binDir, 'tidy'), binaryDest);
+          } else {
+            // Check if extracted inside an archive folder (e.g. tidy-v0.1.0-...)
+            const entries = fs.readdirSync(binDir, { withFileTypes: true });
+            for (const entry of entries) {
+              if (entry.isDirectory()) {
+                const nested = path.join(binDir, entry.name, 'tidy');
+                if (fs.existsSync(nested)) {
+                  fs.renameSync(nested, binaryDest);
+                  try {
+                    fs.rmSync(path.join(binDir, entry.name), { recursive: true, force: true });
+                  } catch {}
+                  break;
+                }
+              }
+            }
           }
-          fs.chmodSync(binaryDest, 0o755);
-          console.log(`[tidy] Successfully installed native binary to ${binaryDest}`);
+
+          if (fs.existsSync(binaryDest)) {
+            fs.chmodSync(binaryDest, 0o755);
+            console.log(`[tidy] Successfully installed native binary to ${binaryDest}`);
+          } else {
+            throw new Error(`Could not find extracted binary in ${binDir}`);
+          }
         } catch (err) {
           console.warn(`[tidy] Extraction warning: ${err.message}`);
         } finally {
