@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.tidy</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/tidy</string>
+        <string>watch</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <!-- Note: macOS launchd does not expand '~'. Standard dynamic generation via 'tidy service enable'
+         writes the full absolute path into ~/Library/Logs/tidy/tidy.log. -->
+    <key>StandardOutPath</key>
+    <string>/Users/Shared/tidy/tidy.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/Shared/tidy/tidy.err</string>
+</dict>
+</plist>

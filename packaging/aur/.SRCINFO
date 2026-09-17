@@ -1,0 +1,14 @@
+pkgbase = tidy-bin
+	pkgdesc = A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust
+	pkgver = 0.1.0
+	pkgrel = 1
+	url = https://github.com/humayan-x/tidy
+	arch = x86_64
+	license = MIT
+	license = Apache-2.0
+	provides = tidy
+	conflicts = tidy
+	source_x86_64 = https://github.com/humayan-x/tidy/releases/download/v0.1.0/tidy-v0.1.0-x86_64-unknown-linux-musl.tar.gz
+	sha256sums_x86_64 = SKIP
+
+pkgname = tidy-bin

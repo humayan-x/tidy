@@ -1,0 +1,24 @@
+[Unit]
+Description=tidy - Local-first background file organizer daemon
+Documentation=https://github.com/humayan-x/tidy
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=%h/.cargo/bin/tidy watch
+Restart=on-failure
+RestartSec=5s
+
+# Logging configuration
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tidy
+
+# Resource scheduling politeness
+Nice=10
+
+# Security sandboxing
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

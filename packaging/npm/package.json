@@ -1,0 +1,38 @@
+{
+  "name": "tidy-file-organizer",
+  "version": "0.1.0",
+  "description": "A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.",
+  "bin": {
+    "tidy": "./bin/tidy.js"
+  },
+  "scripts": {
+    "postinstall": "node ./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "README.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "file-organizer",
+    "file-watcher",
+    "automation",
+    "downloads-organizer",
+    "rust",
+    "cli"
+  ],
+  "author": "tidy contributors",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/humayan-x/tidy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/humayan-x/tidy/issues"
+  },
+  "homepage": "https://github.com/humayan-x/tidy#readme"
+}
