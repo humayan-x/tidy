@@ -1,13 +1,10 @@
 {
   "name": "@humayan-x/tidy",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.",
-  "bin": {
-    "tidy": "bin/tidy.js",
-    "@humayan-x/tidy": "bin/tidy.js"
-  },
+  "bin": "./bin/tidy.js",
   "scripts": {
-    "postinstall": "node bin/install.js"
+    "postinstall": "node ./bin/install.js"
   },
   "files": [
     "bin/",
