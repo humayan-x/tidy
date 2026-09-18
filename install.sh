@@ -3,7 +3,7 @@
 # Installs the precompiled binary for Linux and macOS.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/user/tidy/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh
 #
 # Environment variables:
 #   TIDY_VERSION : Specify a release version (e.g. 0.1.0). Default: latest release.

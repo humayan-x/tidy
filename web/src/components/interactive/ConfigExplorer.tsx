@@ -5,34 +5,35 @@ type ViewMode = 'toml' | 'categories';
 const CATEGORIES = [
   {
     name: 'Documents',
-    dest: 'Documents/<EXT>',
-    count: '16 formats',
+    dest: 'Documents/{PDFs,Word,Excel,...}',
+    count: '20 formats',
     examples: ['pdf', 'docx', 'xlsx', 'pptx', 'csv', 'epub', 'md', 'txt', 'rtf', 'odt'],
+    highlight: 'Curated suites (Word, Excel, PDFs)',
   },
   {
     name: 'Images',
     dest: 'Images/<EXT>',
-    count: '12 formats',
+    count: '16 formats',
     examples: ['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif', 'bmp', 'tiff', 'heic', 'avif'],
   },
   {
     name: 'Archives',
     dest: 'Archives/<EXT>',
-    count: '14 formats',
+    count: '19 formats',
     examples: ['zip', 'tar.gz', 'tar.bz2', 'tar.xz', 'tar.zst', '7z', 'rar', 'gz', 'bz2'],
     highlight: 'Compound archive detection',
   },
   {
     name: 'Code',
     dest: 'Code/<EXT>',
-    count: '18 formats',
+    count: '34 formats',
     examples: ['rs', 'ts', 'js', 'py', 'go', 'c', 'cpp', 'java', 'html', 'css', 'json', 'toml'],
   },
   {
     name: 'Audio',
     dest: 'Audio/<EXT>',
-    count: '9 formats',
-    examples: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a', 'wma'],
+    count: '12 formats',
+    examples: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a', 'wma', 'opus'],
   },
   {
     name: 'Video',
@@ -58,7 +59,7 @@ stability_tick_ms = 500
 # Whether to scan or watch subdirectories recursively
 recursive = false
 
-# Whether to organize files into extension-based subfolders (e.g. Documents/PDFs, Documents/Word)
+# Whether to organize files into extension-based subfolders (e.g. Documents/PDFs, Documents/Word, Images/PNG)
 nest_by_extension = true
 
 # Download and temporary file guard patterns to ignore during watch/run
@@ -68,16 +69,30 @@ ignore_patterns = [
   "*.download",
   "*.aria2",
   "*.tmp",
-  "*.swp"
+  "*.partial",
+  ".DS_Store",
+  "Thumbs.db",
+  "*.swp",
+  "*~"
 ]
 
-[categories.Documents]
-destination = "Docs"
-extensions = ["pdf", "docx", "xlsx", "pptx", "txt", "md", "csv"]
+# Map category names to custom folder names (optional overrides)
+[destinations]
+Images = "Photos"
+Documents = "Docs"
 
-[categories.Archives]
-destination = "Archives"
-extensions = ["zip", "tar.gz", "tar.bz2", "tar.xz", "tar.zst", "7z", "rar"]`;
+# Custom subfolder overrides for nested extension folders (optional)
+# Defaults: .pdf -> PDFs, .doc/.docx -> Word, .xls/.xlsx -> Excel, .ppt/.pptx -> PowerPoint
+# All unlisted extensions default to uppercase (e.g. .png -> Images/PNG)
+[subfolders]
+odt = "Word"
+rtf = "Word"
+
+# User-defined custom categories (optional; tidy includes 70+ default formats)
+[categories]
+3D = ["obj", "stl", "blend", "fbx"]
+EBooks = ["epub", "mobi"]
+Data = ["csv", "tsv", "parquet", "jsonl"]`;
 
 export default function ConfigExplorer() {
   const [viewMode, setViewMode] = createSignal<ViewMode>('toml');

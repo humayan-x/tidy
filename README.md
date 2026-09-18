@@ -275,33 +275,29 @@ tidy status
 
 Output:
 ```text
-Configuration:
-  Path: /home/user/.config/tidy/config.toml
-  Watch Directory: /home/user/Downloads
-  Ignore Hidden: true
-  Debounce: 2000ms
-  Stability Tick: 500ms
-  Recursive: false
-  Ignored Patterns: 9
+  TIDY SYSTEM STATUS
 
-Categories & Destinations:
-  Images -> Photos (12 extensions)
-  Documents -> Docs (16 extensions)
-  Audio -> Audio (9 extensions)
-  Video -> Video (10 extensions)
-  Archives -> Archives (14 extensions)
-  Code -> Code (18 extensions)
+  Configuration:
+    Path:    /home/user/.config/tidy/config.toml
+    Status:  Active (loaded from disk)
+    Rules:   6 active categories, 2 custom destinations
+    Categories: Archives, Audio, Code, Documents, Images, Video
 
-Database & History:
-  Ledger Path: /home/user/.local/state/tidy/history.db
-  Total Database Size: 32.0 KB
-  Total Moves Recorded: 42
-  Total Batches: 3
+  State & Ledger:
+    Database: /home/user/.local/state/tidy/history.db
+    Size:     32.0 KB
 
-Service Daemon:
-  Platform: systemd --user
-  Service: tidy.service
-  State: active (running)
+  Latest Activity:
+    Run ID:    e5b38d61-8cf1-45df-bbca-bdf7bb7f975b
+    Timestamp: 2026-09-18 14:32:01 UTC
+    Command:   tidy run --path ~/Downloads
+    Root:      /home/user/Downloads
+    Status:    COMPLETED
+    Files:     42 file operations recorded
+
+  Background Service:
+    Status:    Active (systemd --user: tidy.service running)
+    Unit Path: /home/user/.config/systemd/user/tidy.service
 ```
 
 ---
@@ -393,7 +389,9 @@ stability_tick_ms = 500
 # Whether to scan or watch subdirectories recursively
 recursive = false
 
-# Whether to organize files into extension-based subfolders (e.g. Documents/PDFs, Documents/Word)
+# Whether to organize files into extension-based subfolders (e.g. Documents/PDFs, Documents/Word, Images/PNG)
+# Defaults: .pdf -> PDFs, .doc/.docx -> Word, .xls/.xlsx -> Excel, .ppt/.pptx -> PowerPoint.
+# All unlisted extensions normalize to uppercase (e.g. .png -> Images/PNG, .rs -> Code/RS).
 nest_by_extension = true
 
 # Glob patterns to ignore
@@ -410,18 +408,18 @@ ignore_patterns = [
     "*~",
 ]
 
-# Custom folder names for default categories
+# Custom folder names for default categories (optional)
 [destinations]
 Images = "Photos"
 Documents = "Docs"
 
 # Custom subfolder names for nested extension folders (optional)
-# Overrides or adds to defaults (.pdf -> PDFs, .doc/.docx -> Word, .xls/.xlsx/.ods -> Excel, .ppt/.pptx -> PowerPoint)
+# Overrides or adds to defaults (.pdf -> PDFs, .doc/.docx -> Word, .xls/.xlsx -> Excel, .ppt/.pptx -> PowerPoint)
 [subfolders]
 odt = "Word"
 rtf = "Word"
 
-# User-defined custom categories
+# User-defined custom categories (optional; tidy includes 70+ default formats)
 [categories]
 3D = ["obj", "stl", "blend", "fbx"]
 EBooks = ["epub", "mobi"]

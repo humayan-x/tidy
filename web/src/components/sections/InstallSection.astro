@@ -41,8 +41,12 @@ import { Icon } from 'astro-icon/components';
             <span class="text-muted text-[11px]">Preview without moving</span>
           </div>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 py-2">
-            <code class="text-title font-semibold text-[11px] sm:text-xs whitespace-nowrap overflow-x-auto no-scrollbar touch-scroll">$ tidy watch</code>
-            <span class="text-muted text-[11px]">Start kernel watcher</span>
+            <code class="text-title font-semibold text-[11px] sm:text-xs whitespace-nowrap overflow-x-auto no-scrollbar touch-scroll">$ tidy run --recursive</code>
+            <span class="text-muted text-[11px]">Scan subfolders recursively</span>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 py-2">
+            <code class="text-title font-semibold text-[11px] sm:text-xs whitespace-nowrap overflow-x-auto no-scrollbar touch-scroll">$ tidy watch --initial-scan</code>
+            <span class="text-muted text-[11px]">Initial pass + kernel watcher</span>
           </div>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 py-2">
             <code class="text-title font-semibold text-[11px] sm:text-xs whitespace-nowrap overflow-x-auto no-scrollbar touch-scroll">$ tidy undo</code>

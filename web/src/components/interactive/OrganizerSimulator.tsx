@@ -77,7 +77,7 @@ const INITIAL_FILES: FileItem[] = [
     organizedPath: '~/Downloads/large_dataset.zip.crdownload',
     category: 'Ignored',
     ext: 'crdownload',
-    size: '1.2 GB (writing)',
+    size: '1.2 / 2.4 GB',
     isDownloadGuard: true,
     status: 'guard',
   },
@@ -186,7 +186,7 @@ export default function OrganizerSimulator() {
           </span>
         </div>
         <div class="text-dim text-[10px] sm:text-xs">
-          Ledger: <span class="text-muted">~/.local/state/tidy/history.db</span>
+          Ledger: <span class="text-muted">~/.local/state/tidy/history.db</span> <span class="hidden md:inline text-dim/80">(macOS: ~/Library/Application Support/tidy/history.db)</span>
         </div>
       </div>
 
@@ -264,7 +264,7 @@ export default function OrganizerSimulator() {
                   <Show when={file.isDownloadGuard}>
                     <span class="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-950/60 px-1.5 py-0.5 text-[10px] text-amber-300 shadow-sm animate-pulse">
                       <span class="w-2.5 h-2.5 flex items-center justify-center [&>svg]:w-2.5 [&>svg]:h-2.5" innerHTML={iconAlertTriangle} />
-                      {isOrganized() ? 'Shielded' : 'Writing (48%)'}
+                      {isOrganized() ? 'Protected in Root' : 'Download Guard (48%)'}
                     </span>
                   </Show>
                   <Show when={file.isCollision}>
