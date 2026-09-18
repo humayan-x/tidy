@@ -2,7 +2,7 @@ import { createSignal, For, Show } from 'solid-js';
 import iconCopy from '@tabler/icons/outline/copy.svg?raw';
 import iconCheck from '@tabler/icons/outline/check.svg?raw';
 
-type TabKey = 'curl' | 'npx' | 'brew' | 'aur' | 'cargo';
+type TabKey = 'curl' | 'npx' | 'cargo';
 
 interface InstallOption {
   key: TabKey;
@@ -23,18 +23,6 @@ const OPTIONS: InstallOption[] = [
     label: 'npx / npm',
     command: 'npx @humayan-x/tidy run --dry-run',
     subtext: 'Run immediately without prior installation, or install globally via: npm install -g @humayan-x/tidy',
-  },
-  {
-    key: 'brew',
-    label: 'Homebrew',
-    command: 'brew install humayan-x/tap/tidy',
-    subtext: 'Official Homebrew tap for macOS and Linuxbrew systems.',
-  },
-  {
-    key: 'aur',
-    label: 'Arch Linux (AUR)',
-    command: 'yay -S tidy-bin',
-    subtext: 'Pre-built binary package available on the Arch User Repository.',
   },
   {
     key: 'cargo',
@@ -61,17 +49,17 @@ export default function InstallTabs() {
   };
 
   return (
-    <div class="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden shadow-xl">
+    <div class="rounded-lg border border-line-default bg-surface-card overflow-hidden shadow-xl">
       {/* Tabs Header */}
-      <div class="flex items-center border-b border-zinc-800 bg-zinc-950 overflow-x-auto">
+      <div class="flex items-center border-b border-line-default bg-surface-root overflow-x-auto no-scrollbar touch-scroll">
         <For each={OPTIONS}>
           {(option) => (
             <button
               onClick={() => setActiveTab(option.key)}
-              class={`border-r border-zinc-800 px-4 py-3 font-mono text-xs font-medium transition-colors whitespace-nowrap ${
+              class={`border-r border-line-default px-3.5 sm:px-4 py-2.5 sm:py-3 font-mono text-xs font-medium transition-colors whitespace-nowrap min-h-[42px] ${
                 activeTab() === option.key
-                  ? 'bg-zinc-900 text-zinc-100 border-b-2 border-b-cyan-400'
-                  : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-200'
+                  ? 'bg-surface-card text-title border-b-2 border-b-primary'
+                  : 'text-muted hover:bg-surface-subtle hover:text-title'
               }`}
             >
               {option.label}
@@ -81,36 +69,36 @@ export default function InstallTabs() {
       </div>
 
       {/* Terminal Command Area */}
-      <div class="p-4 sm:p-6 bg-zinc-900">
-        <div class="flex items-center justify-between gap-4 rounded border border-zinc-800 bg-zinc-950 px-4 py-3.5 font-mono text-xs sm:text-sm">
-          <div class="flex items-center gap-2.5 overflow-x-auto py-1">
-            <span class="text-cyan-400 select-none">$</span>
-            <span class="text-zinc-200 select-all whitespace-nowrap">
+      <div class="p-3 sm:p-6 bg-surface-card">
+        <div class="flex items-center justify-between gap-3 rounded border border-line-default bg-surface-root px-3 py-2.5 sm:px-4 sm:py-3.5 font-mono text-xs sm:text-sm">
+          <div class="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar touch-scroll py-1 text-left">
+            <span class="text-primary select-none">$</span>
+            <span class="text-title select-all whitespace-nowrap text-[11px] sm:text-sm">
               {currentOption().command}
             </span>
           </div>
 
           <button
             onClick={handleCopy}
-            class="flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-800 px-3 py-1.5 font-mono text-xs text-zinc-300 transition-colors hover:bg-zinc-700 hover:text-zinc-100 shrink-0"
+            class="flex items-center gap-1.5 rounded border border-line-strong bg-surface-elevated px-2.5 sm:px-3 py-1.5 font-mono text-xs text-body transition-colors hover:bg-surface-hover hover:text-title shrink-0 min-h-[30px]"
             title="Copy command"
           >
             <Show
               when={copied()}
               fallback={
                 <>
-                  <span class="w-3.5 h-3.5 text-zinc-400 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5" innerHTML={iconCopy} />
+                  <span class="w-3.5 h-3.5 text-muted flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5" innerHTML={iconCopy} />
                   <span>Copy</span>
                 </>
               }
             >
-              <span class="w-3.5 h-3.5 text-cyan-400 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5" innerHTML={iconCheck} />
-              <span class="text-cyan-400">Copied</span>
+              <span class="w-3.5 h-3.5 text-primary flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5" innerHTML={iconCheck} />
+              <span class="text-primary">Copied</span>
             </Show>
           </button>
         </div>
 
-        <p class="mt-3 text-xs text-zinc-400">
+        <p class="mt-2.5 sm:mt-3 text-[11px] sm:text-xs text-muted">
           {currentOption().subtext}
         </p>
       </div>

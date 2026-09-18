@@ -23,10 +23,8 @@ export default {
           50: '#fafafa',
         },
         brand: {
-          emerald: '#10b981',
+          primary: '#F2765E',
           rust: '#f97316',
-          cyan: '#06b6d4',
-          blue: '#3b82f6',
         }
       },
       fontFamily: {

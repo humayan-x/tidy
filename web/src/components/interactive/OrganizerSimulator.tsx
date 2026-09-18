@@ -125,29 +125,29 @@ export default function OrganizerSimulator() {
   };
 
   return (
-    <div class="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl">
+    <div class="rounded-lg border border-line-default bg-surface-card overflow-hidden shadow-2xl">
       {/* Terminal Titlebar */}
-      <div class="flex items-center justify-between border-b border-zinc-800 bg-zinc-950 px-4 py-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line-default bg-surface-root px-3.5 sm:px-4 py-3">
         <div class="flex items-center gap-2">
-          <div class="flex gap-1.5">
-            <div class="h-3 w-3 rounded-full bg-zinc-700" />
-            <div class="h-3 w-3 rounded-full bg-zinc-700" />
-            <div class="h-3 w-3 rounded-full bg-zinc-700" />
+          <div class="flex gap-1.5 shrink-0">
+            <div class="h-3 w-3 rounded-full bg-surface-hover" />
+            <div class="h-3 w-3 rounded-full bg-surface-hover" />
+            <div class="h-3 w-3 rounded-full bg-surface-hover" />
           </div>
-          <span class="ml-2 font-mono text-xs text-zinc-400">
+          <span class="ml-1.5 font-mono text-[11px] sm:text-xs text-muted truncate">
             tidy-simulator — {isOrganized() ? '~/Downloads (Organized Tree)' : '~/Downloads (Unsorted Flat)'}
           </span>
         </div>
 
         {/* Action Buttons */}
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={handleOrganize}
             disabled={isOrganized()}
-            class={`inline-flex items-center gap-1.5 rounded px-3 py-1 font-mono text-xs font-medium transition-colors ${
+            class={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 rounded px-3 py-1.5 sm:py-1 font-mono text-xs font-medium transition-colors min-h-[36px] ${
               isOrganized()
-                ? 'border border-zinc-800 bg-zinc-800/50 text-zinc-500 cursor-not-allowed'
-                : 'border border-cyan-600 bg-cyan-950/60 text-cyan-300 hover:bg-cyan-900/60'
+                ? 'border border-line-default bg-surface-elevated/50 text-dim cursor-not-allowed'
+                : 'border border-primary/60 bg-primary/10 text-primary hover:bg-primary/20'
             }`}
           >
             <span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5" innerHTML={iconTerminal} />
@@ -157,10 +157,10 @@ export default function OrganizerSimulator() {
           <button
             onClick={handleUndo}
             disabled={!isOrganized()}
-            class={`inline-flex items-center gap-1.5 rounded px-3 py-1 font-mono text-xs font-medium transition-colors ${
+            class={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 rounded px-3 py-1.5 sm:py-1 font-mono text-xs font-medium transition-colors min-h-[36px] ${
               !isOrganized()
-                ? 'border border-zinc-800 bg-zinc-800/50 text-zinc-500 cursor-not-allowed'
-                : 'border border-zinc-700 bg-zinc-800 text-zinc-200 hover:bg-zinc-700'
+                ? 'border border-line-default bg-surface-elevated/50 text-dim cursor-not-allowed'
+                : 'border border-line-strong bg-surface-elevated text-title hover:bg-surface-hover'
             }`}
           >
             <span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5" innerHTML={iconHistory} />
@@ -170,12 +170,12 @@ export default function OrganizerSimulator() {
       </div>
 
       {/* Info Status Bar */}
-      <div class="border-b border-zinc-800 bg-zinc-950/60 px-4 py-2 text-xs font-mono flex flex-wrap items-center justify-between gap-2">
+      <div class="border-b border-line-default bg-surface-subtle px-3.5 sm:px-4 py-2 text-[11px] sm:text-xs font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
         <div class="flex items-center gap-2">
-          <span class="inline-block h-2 w-2 rounded-full bg-cyan-400" />
-          <span class="text-zinc-400">
+          <span class="inline-block h-2 w-2 rounded-full bg-primary shrink-0" />
+          <span class="text-muted">
             {isOrganized() ? (
-              <span class="text-cyan-400">
+              <span class="text-primary">
                 State: Structured (5 Category subdirectories, 0 collisions unresolved)
               </span>
             ) : (
@@ -185,96 +185,141 @@ export default function OrganizerSimulator() {
             )}
           </span>
         </div>
-        <div class="text-zinc-500">
-          Ledger: <span class="text-zinc-400">~/.local/state/tidy/history.db</span>
+        <div class="text-dim text-[10px] sm:text-xs">
+          Ledger: <span class="text-muted">~/.local/state/tidy/history.db</span>
         </div>
       </div>
 
       {/* Category Filter Tabs */}
-      <div class="flex items-center gap-1 border-b border-zinc-800 bg-zinc-900 px-4 py-2 overflow-x-auto text-xs font-mono">
+      <div class="flex items-center gap-1 border-b border-line-default bg-surface-card px-3 sm:px-4 py-2 overflow-x-auto no-scrollbar touch-scroll text-xs font-mono">
         <button
           onClick={() => setActiveTab('all')}
-          class={`rounded px-2.5 py-1 transition-colors ${
+          class={`rounded px-2.5 py-1 transition-colors shrink-0 ${
             activeTab() === 'all'
-              ? 'bg-zinc-800 text-zinc-100 font-semibold'
-              : 'text-zinc-400 hover:text-zinc-200'
+              ? 'bg-surface-elevated text-title font-semibold'
+              : 'text-muted hover:text-title'
           }`}
         >
           All Items ({INITIAL_FILES.length})
         </button>
         <button
           onClick={() => setActiveTab('documents')}
-          class={`rounded px-2.5 py-1 transition-colors ${
+          class={`rounded px-2.5 py-1 transition-colors shrink-0 ${
             activeTab() === 'documents'
-              ? 'bg-zinc-800 text-zinc-100 font-semibold'
-              : 'text-zinc-400 hover:text-zinc-200'
+              ? 'bg-surface-elevated text-title font-semibold'
+              : 'text-muted hover:text-title'
           }`}
         >
           Documents (2)
         </button>
         <button
           onClick={() => setActiveTab('images')}
-          class={`rounded px-2.5 py-1 transition-colors ${
+          class={`rounded px-2.5 py-1 transition-colors shrink-0 ${
             activeTab() === 'images'
-              ? 'bg-zinc-800 text-zinc-100 font-semibold'
-              : 'text-zinc-400 hover:text-zinc-200'
+              ? 'bg-surface-elevated text-title font-semibold'
+              : 'text-muted hover:text-title'
           }`}
         >
           Images (2)
         </button>
         <button
           onClick={() => setActiveTab('archives')}
-          class={`rounded px-2.5 py-1 transition-colors ${
+          class={`rounded px-2.5 py-1 transition-colors shrink-0 ${
             activeTab() === 'archives'
-              ? 'bg-zinc-800 text-zinc-100 font-semibold'
-              : 'text-zinc-400 hover:text-zinc-200'
+              ? 'bg-surface-elevated text-title font-semibold'
+              : 'text-muted hover:text-title'
           }`}
         >
           Archives (1)
         </button>
         <button
           onClick={() => setActiveTab('code')}
-          class={`rounded px-2.5 py-1 transition-colors ${
+          class={`rounded px-2.5 py-1 transition-colors shrink-0 ${
             activeTab() === 'code'
-              ? 'bg-zinc-800 text-zinc-100 font-semibold'
-              : 'text-zinc-400 hover:text-zinc-200'
+              ? 'bg-surface-elevated text-title font-semibold'
+              : 'text-muted hover:text-title'
           }`}
         >
           Code (1)
         </button>
       </div>
 
-      {/* File List Table */}
-      <div class="overflow-x-auto">
+      {/* Mobile Card List View (<sm) */}
+      <div class="block sm:hidden divide-y divide-line-subtle font-mono text-xs">
+        <For each={filteredFiles()}>
+          {(file) => (
+            <div class="p-3 space-y-2 hover:bg-surface-subtle transition-colors">
+              <div class="flex items-start gap-2">
+                <span class="w-4 h-4 text-dim shrink-0 mt-0.5 flex items-center justify-center [&>svg]:w-4 [&>svg]:h-4" innerHTML={iconFile} />
+                <div class="font-medium text-title break-all text-[11px] leading-snug">
+                  {isOrganized() ? file.organizedPath : file.originalPath}
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-0.5 text-[11px]">
+                <span class="inline-flex items-center rounded border border-line-default bg-surface-root px-2 py-0.5 text-body">
+                  {isOrganized() ? (file.isDownloadGuard ? 'Protected in Root' : file.category + '/' + file.ext.toUpperCase()) : 'Downloads (root)'}
+                </span>
+                <div class="flex items-center gap-2">
+                  <span class="text-muted text-[10px]">{file.size}</span>
+                  <Show when={file.isDownloadGuard}>
+                    <span class="inline-flex items-center gap-1 rounded border border-amber-900/60 bg-amber-950/40 px-1.5 py-0.5 text-[10px] text-amber-300">
+                      <span class="w-2.5 h-2.5 flex items-center justify-center [&>svg]:w-2.5 [&>svg]:h-2.5" innerHTML={iconAlertTriangle} />
+                      Guard
+                    </span>
+                  </Show>
+                  <Show when={file.isCollision}>
+                    <span class={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] ${
+                      isOrganized()
+                        ? 'border border-primary/40 bg-primary/10 text-primary'
+                        : 'border border-line-default bg-surface-root text-muted'
+                    }`}>
+                      {isOrganized() ? 'Renamed: (1)' : 'Collision'}
+                    </span>
+                  </Show>
+                  <Show when={!file.isDownloadGuard && !file.isCollision}>
+                    <span class="inline-flex items-center gap-1 text-muted text-[10px]">
+                      <span class="w-2.5 h-2.5 text-primary flex items-center justify-center [&>svg]:w-2.5 [&>svg]:h-2.5" innerHTML={iconCheck} />
+                      {isOrganized() ? 'Moved' : 'Ready'}
+                    </span>
+                  </Show>
+                </div>
+              </div>
+            </div>
+          )}
+        </For>
+      </div>
+
+      {/* Desktop File List Table (>=sm) */}
+      <div class="hidden sm:block overflow-x-auto no-scrollbar touch-scroll">
         <table class="w-full text-left font-mono text-xs">
           <thead>
-            <tr class="border-b border-zinc-800 bg-zinc-950/40 text-zinc-400">
+            <tr class="border-b border-line-default bg-surface-subtle text-muted">
               <th class="py-2.5 px-4 font-medium">Path & Name</th>
               <th class="py-2.5 px-4 font-medium">Category / Destination</th>
               <th class="py-2.5 px-4 font-medium">Size</th>
               <th class="py-2.5 px-4 font-medium">Safety Status</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-800/60">
+          <tbody class="divide-y divide-line-subtle">
             <For each={filteredFiles()}>
               {(file) => (
-                <tr class="hover:bg-zinc-850/50 transition-colors">
+                <tr class="hover:bg-surface-subtle transition-colors">
                   <td class="py-2.5 px-4">
                     <div class="flex items-center gap-2">
-                      <span class="w-4 h-4 text-zinc-500 shrink-0 flex items-center justify-center [&>svg]:w-4 [&>svg]:h-4" innerHTML={iconFile} />
+                      <span class="w-4 h-4 text-dim shrink-0 flex items-center justify-center [&>svg]:w-4 [&>svg]:h-4" innerHTML={iconFile} />
                       <div>
-                        <div class="font-medium text-zinc-200">
+                        <div class="font-medium text-title">
                           {isOrganized() ? file.organizedPath : file.originalPath}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td class="py-2.5 px-4">
-                    <span class="inline-flex items-center rounded border border-zinc-800 bg-zinc-950 px-2 py-0.5 text-[11px] text-zinc-300">
+                    <span class="inline-flex items-center rounded border border-line-default bg-surface-root px-2 py-0.5 text-[11px] text-body">
                       {isOrganized() ? (file.isDownloadGuard ? 'Protected in Root' : file.category + '/' + file.ext.toUpperCase()) : 'Downloads (root)'}
                     </span>
                   </td>
-                  <td class="py-2.5 px-4 text-zinc-400">{file.size}</td>
+                  <td class="py-2.5 px-4 text-muted">{file.size}</td>
                   <td class="py-2.5 px-4">
                     <Show when={file.isDownloadGuard}>
                       <span class="inline-flex items-center gap-1 rounded border border-amber-900/60 bg-amber-950/40 px-2 py-0.5 text-[11px] text-amber-300">
@@ -285,15 +330,15 @@ export default function OrganizerSimulator() {
                     <Show when={file.isCollision}>
                       <span class={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] ${
                         isOrganized()
-                          ? 'border border-cyan-900/60 bg-cyan-950/40 text-cyan-300'
-                          : 'border border-zinc-800 bg-zinc-950 text-zinc-400'
+                          ? 'border border-primary/40 bg-primary/10 text-primary'
+                          : 'border border-line-default bg-surface-root text-muted'
                       }`}>
                         {isOrganized() ? 'Renamed: (1).png' : 'Collision Risk'}
                       </span>
                     </Show>
                     <Show when={!file.isDownloadGuard && !file.isCollision}>
-                      <span class="inline-flex items-center gap-1 text-zinc-400 text-[11px]">
-                        <span class="w-3 h-3 text-cyan-400 flex items-center justify-center [&>svg]:w-3 [&>svg]:h-3" innerHTML={iconCheck} />
+                      <span class="inline-flex items-center gap-1 text-muted text-[11px]">
+                        <span class="w-3 h-3 text-primary flex items-center justify-center [&>svg]:w-3 [&>svg]:h-3" innerHTML={iconCheck} />
                         {isOrganized() ? 'Moved & Logged' : 'Ready'}
                       </span>
                     </Show>
@@ -307,8 +352,8 @@ export default function OrganizerSimulator() {
 
       {/* Terminal Footer Console Log */}
       <Show when={lastAction()}>
-        <div class="border-t border-zinc-800 bg-zinc-950 px-4 py-3 font-mono text-xs text-zinc-400 flex items-start gap-2">
-          <span class="text-cyan-400 shrink-0">$</span>
+        <div class="border-t border-line-default bg-surface-root px-3.5 sm:px-4 py-3 font-mono text-[11px] sm:text-xs text-muted flex items-start gap-2">
+          <span class="text-primary shrink-0">$</span>
           <span>{lastAction()}</span>
         </div>
       </Show>

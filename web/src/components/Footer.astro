@@ -2,24 +2,22 @@
 import { Icon } from 'astro-icon/components';
 ---
 
-<footer class="mt-auto border-t border-zinc-800 bg-zinc-950">
-  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+<footer class="mt-auto border-t border-line-default bg-surface-root">
+  <div class="mx-auto max-w-7xl px-3.5 py-10 sm:px-6 sm:py-12 lg:px-8">
     <div class="grid grid-cols-1 gap-8 md:grid-cols-4">
       <!-- Col 1: Brand & Bio -->
       <div class="space-y-3 md:col-span-2">
         <div class="flex items-center gap-2">
-          <div class="flex h-7 w-7 items-center justify-center rounded border border-zinc-700 bg-zinc-900 text-cyan-400">
-            <Icon name="tabler:terminal-2" class="w-3.5 h-3.5 text-cyan-400" />
-          </div>
-          <span class="font-mono text-base font-bold tracking-tight text-zinc-100">tidy</span>
-          <span class="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[11px] text-zinc-400">
+          <Icon name="tabler:terminal-2" class="w-5 h-5 text-primary shrink-0" />
+          <span class="font-mono text-base font-bold tracking-tight text-title">tidy</span>
+          <span class="font-mono text-xs text-dim">
             v0.2.0
           </span>
         </div>
-        <p class="max-w-md text-sm leading-relaxed text-zinc-400">
+        <p class="max-w-md text-sm leading-relaxed text-muted">
           A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS. Non-destructive by design with transactional SQLite rollback.
         </p>
-        <div class="flex items-center gap-2 pt-2 text-xs font-mono text-zinc-500">
+        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs font-mono text-dim">
           <span>Rust 1.75+</span>
           <span>•</span>
           <span>Dual MIT / Apache-2.0</span>
@@ -30,42 +28,32 @@ import { Icon } from 'astro-icon/components';
 
       <!-- Col 2: Commands & CLI -->
       <div>
-        <h3 class="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-300">
+        <h3 class="font-mono text-xs font-semibold uppercase tracking-wider text-body">
           Commands
         </h3>
-        <ul class="mt-3 space-y-2 text-sm text-zinc-400 font-mono">
-          <li>
-            <a href="#demo" class="hover:text-zinc-100 transition-colors">tidy run</a>
-          </li>
-          <li>
-            <a href="#pipeline" class="hover:text-zinc-100 transition-colors">tidy watch</a>
-          </li>
-          <li>
-            <a href="#demo" class="hover:text-zinc-100 transition-colors">tidy undo</a>
-          </li>
-          <li>
-            <a href="#pipeline" class="hover:text-zinc-100 transition-colors">tidy status</a>
-          </li>
-          <li>
-            <a href="#install" class="hover:text-zinc-100 transition-colors">tidy service</a>
-          </li>
+        <ul class="mt-3 space-y-1.5 text-sm text-muted font-mono">
+          <li class="py-0.5">tidy run</li>
+          <li class="py-0.5">tidy watch</li>
+          <li class="py-0.5">tidy undo</li>
+          <li class="py-0.5">tidy status</li>
+          <li class="py-0.5">tidy service</li>
         </ul>
       </div>
 
       <!-- Col 3: Resources & Distribution -->
       <div>
-        <h3 class="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-300">
+        <h3 class="font-mono text-xs font-semibold uppercase tracking-wider text-body">
           Distribution
         </h3>
-        <ul class="mt-3 space-y-2 text-sm text-zinc-400">
+        <ul class="mt-3 space-y-1.5 text-sm text-muted">
           <li>
             <a
               href="https://github.com/humayan-x/tidy"
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-zinc-100 transition-colors flex items-center gap-1.5"
+              class="hover:text-title transition-colors flex items-center gap-1.5 py-0.5"
             >
-              <Icon name="tabler:brand-github" class="w-4 h-4 text-zinc-500" />
+              <Icon name="tabler:brand-github" class="w-4 h-4 text-dim shrink-0" />
               <span>GitHub Repository</span>
             </a>
           </li>
@@ -74,29 +62,9 @@ import { Icon } from 'astro-icon/components';
               href="https://www.npmjs.com/package/@humayan-x/tidy"
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-zinc-100 transition-colors"
+              class="hover:text-title transition-colors block py-0.5"
             >
               npm: @humayan-x/tidy
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/humayan-x/homebrew-tap"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:text-zinc-100 transition-colors"
-            >
-              Homebrew Tap
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://aur.archlinux.org/packages/tidy-bin"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:text-zinc-100 transition-colors"
-            >
-              Arch User Repository (AUR)
             </a>
           </li>
           <li>
@@ -104,7 +72,7 @@ import { Icon } from 'astro-icon/components';
               href="https://github.com/humayan-x/tidy/releases"
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-zinc-100 transition-colors"
+              class="hover:text-title transition-colors block py-0.5"
             >
               Binary Releases
             </a>
@@ -113,9 +81,9 @@ import { Icon } from 'astro-icon/components';
       </div>
     </div>
 
-    <div class="mt-10 border-t border-zinc-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+    <div class="mt-8 sm:mt-10 border-t border-line-subtle pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-dim text-center sm:text-left">
       <p>© {new Date().getFullYear()} tidy contributors. Released under MIT or Apache-2.0 License.</p>
-      <p class="font-mono text-zinc-500">
+      <p class="font-mono text-dim">
         Engineered with zero runtime dependencies.
       </p>
     </div>

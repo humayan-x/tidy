@@ -61,44 +61,44 @@ const STAGES = [
 ];
 ---
 
-<section id="pipeline" class="border-b border-zinc-800 bg-zinc-950 py-16 sm:py-20">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-6 border-b border-zinc-850">
+<section id="pipeline" class="border-b border-line-default bg-surface-root py-12 sm:py-20">
+  <div class="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 sm:pb-6 border-b border-line-subtle">
       <div>
-        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-cyan-400">
+        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
           Architecture
         </span>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+        <h2 class="mt-1.5 sm:mt-2 text-xl font-bold tracking-tight text-title sm:text-3xl">
           Execution Pipeline
         </h2>
       </div>
-      <div class="font-mono text-xs text-zinc-400">
+      <div class="font-mono text-[11px] sm:text-xs text-muted">
         8 verification gates prior to filesystem mutation
       </div>
     </div>
 
     <!-- 8-Step Grid Flow -->
-    <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-6 sm:mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
       {
         STAGES.map((stage) => (
-          <div class="rounded border border-zinc-800 bg-zinc-900/60 p-4 relative flex flex-col justify-between hover:border-zinc-700 transition-colors">
+          <div class="rounded border border-line-default bg-surface-card p-4 relative flex flex-col justify-between hover:border-line-strong transition-colors">
             <div>
               <div class="flex items-center justify-between">
-                <span class="font-mono text-xs font-bold text-cyan-400">
+                <span class="font-mono text-xs font-bold text-primary">
                   {stage.step}
                 </span>
-                <span class="rounded border border-zinc-800 bg-zinc-950 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                <span class="font-mono text-[11px] text-dim">
                   {stage.type}
                 </span>
               </div>
-              <h3 class="mt-2 font-mono text-xs font-semibold text-zinc-200">
+              <h3 class="mt-2 font-mono text-xs font-semibold text-title">
                 {stage.name}
               </h3>
-              <p class="mt-1 text-xs text-zinc-400 leading-snug">
+              <p class="mt-1 text-xs text-muted leading-snug">
                 {stage.desc}
               </p>
             </div>
-            <div class="mt-3 border-t border-zinc-850 pt-2 font-mono text-[10px] text-zinc-500">
+            <div class="mt-3 border-t border-line-subtle pt-2 font-mono text-[10px] text-dim">
               {stage.detail}
             </div>
           </div>
@@ -106,32 +106,32 @@ const STAGES = [
       }
     </div>
 
-    <!-- Pipeline Safety Callouts -->
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-      <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3 space-y-1">
-        <div class="text-zinc-200 font-semibold flex items-center gap-1.5">
-          <Icon name="tabler:shield-check" class="w-3.5 h-3.5 text-cyan-400" />
+    <!-- Pipeline Safety Callouts (Clean, unboxed) -->
+    <div class="mt-8 pt-6 border-t border-line-subtle grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-mono">
+      <div class="space-y-1">
+        <div class="text-title font-semibold flex items-center gap-1.5">
+          <Icon name="tabler:shield-check" class="w-3.5 h-3.5 text-primary" />
           <span>EXDEV Copy-Verify</span>
         </div>
-        <p class="text-zinc-400 text-[11px] leading-relaxed">
+        <p class="text-muted text-[11px] leading-relaxed">
           Verifies size and checksum before deleting source across disk partitions.
         </p>
       </div>
-      <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3 space-y-1">
-        <div class="text-zinc-200 font-semibold flex items-center gap-1.5">
-          <Icon name="tabler:cpu" class="w-3.5 h-3.5 text-cyan-400" />
+      <div class="space-y-1">
+        <div class="text-title font-semibold flex items-center gap-1.5">
+          <Icon name="tabler:cpu" class="w-3.5 h-3.5 text-primary" />
           <span>Symlink Isolation</span>
         </div>
-        <p class="text-zinc-400 text-[11px] leading-relaxed">
+        <p class="text-muted text-[11px] leading-relaxed">
           Never traverses directory symlinks targeting outside the watch root.
         </p>
       </div>
-      <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3 space-y-1">
-        <div class="text-zinc-200 font-semibold flex items-center gap-1.5">
-          <Icon name="tabler:history" class="w-3.5 h-3.5 text-cyan-400" />
+      <div class="space-y-1">
+        <div class="text-title font-semibold flex items-center gap-1.5">
+          <Icon name="tabler:history" class="w-3.5 h-3.5 text-primary" />
           <span>Atomic Ledger</span>
         </div>
-        <p class="text-zinc-400 text-[11px] leading-relaxed">
+        <p class="text-muted text-[11px] leading-relaxed">
           Immediate WAL journal writes guarantee zero orphaned files during undo.
         </p>
       </div>

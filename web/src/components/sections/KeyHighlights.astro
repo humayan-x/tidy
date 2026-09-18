@@ -47,48 +47,46 @@ const HIGHLIGHTS = [
 ];
 ---
 
-<section id="features" class="border-b border-zinc-800 bg-zinc-950 py-16 sm:py-20">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-6 border-b border-zinc-855">
+<section id="features" class="border-b border-line-default bg-surface-root py-12 sm:py-20">
+  <div class="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 sm:pb-6 border-b border-line-subtle">
       <div>
-        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-cyan-400">
+        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
           Core Engine
         </span>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+        <h2 class="mt-1.5 sm:mt-2 text-xl font-bold tracking-tight text-title sm:text-3xl">
           Engineered for Safety & Speed
         </h2>
       </div>
-      <div class="font-mono text-xs text-zinc-400">
+      <div class="font-mono text-[11px] sm:text-xs text-muted">
         Rust 2021 • Zero dependencies • SQLite WAL
       </div>
     </div>
 
-    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-6 sm:mt-8 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
       {
         HIGHLIGHTS.map((item) => (
-          <div class="flex flex-col justify-between rounded border border-zinc-800 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
+          <div class="flex flex-col justify-between rounded border border-line-default bg-surface-card p-4 sm:p-5 transition-colors hover:border-line-strong">
             <div>
               <div class="flex items-center justify-between">
-                <div class="flex h-9 w-9 items-center justify-center rounded border border-zinc-700 bg-zinc-850 text-cyan-400">
-                  <Icon name={item.iconName} class="w-4 h-4 text-cyan-400" />
-                </div>
-                <span class="rounded border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
+                <Icon name={item.iconName} class="w-5 h-5 text-primary shrink-0" />
+                <span class="font-mono text-[11px] text-dim">
                   {item.tag}
                 </span>
               </div>
 
-              <h3 class="mt-3 font-mono text-sm font-semibold text-zinc-100">
+              <h3 class="mt-3 font-mono text-sm font-semibold text-title">
                 {item.title}
               </h3>
-              <p class="mt-1.5 text-xs text-zinc-400 leading-normal">
+              <p class="mt-1.5 text-xs text-muted leading-normal">
                 {item.description}
               </p>
             </div>
 
-            <div class="mt-4 border-t border-zinc-850 pt-2.5">
+            <div class="mt-4 border-t border-line-subtle pt-2.5">
               <div class="flex items-center justify-between font-mono text-[11px]">
-                <span class="text-zinc-500">CLI:</span>
-                <code class="text-zinc-300 bg-zinc-950 px-1.5 py-0.5 rounded border border-zinc-800">
+                <span class="text-dim">CLI:</span>
+                <code class="text-body font-mono text-xs">
                   {item.codeSnippet}
                 </code>
               </div>

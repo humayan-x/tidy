@@ -83,37 +83,37 @@ export default function ConfigExplorer() {
   const [viewMode, setViewMode] = createSignal<ViewMode>('toml');
 
   return (
-    <div class="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl">
+    <div class="rounded-lg border border-line-default bg-surface-card overflow-hidden shadow-2xl">
       {/* View Switcher Header */}
-      <div class="flex items-center justify-between border-b border-zinc-800 bg-zinc-950 px-4 py-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-line-default bg-surface-root px-3.5 sm:px-4 py-3">
         <div class="flex items-center gap-2">
-          <div class="flex gap-1.5">
-            <div class="h-3 w-3 rounded-full bg-zinc-700" />
-            <div class="h-3 w-3 rounded-full bg-zinc-700" />
-            <div class="h-3 w-3 rounded-full bg-zinc-700" />
+          <div class="flex gap-1.5 shrink-0">
+            <div class="h-3 w-3 rounded-full bg-surface-hover" />
+            <div class="h-3 w-3 rounded-full bg-surface-hover" />
+            <div class="h-3 w-3 rounded-full bg-surface-hover" />
           </div>
-          <span class="ml-2 font-mono text-xs text-zinc-400">
+          <span class="ml-1.5 font-mono text-[11px] sm:text-xs text-muted truncate">
             {viewMode() === 'toml' ? '~/.config/tidy/config.toml' : 'Zero-Config Category Classification Matrix'}
           </span>
         </div>
 
-        <div class="flex items-center rounded border border-zinc-800 bg-zinc-900 p-0.5">
+        <div class="flex items-center rounded border border-line-default bg-surface-card p-0.5 w-full sm:w-auto">
           <button
             onClick={() => setViewMode('toml')}
-            class={`rounded px-3 py-1 font-mono text-xs transition-colors ${
+            class={`flex-1 sm:flex-none rounded px-3 py-1.5 sm:py-1 font-mono text-xs transition-colors text-center ${
               viewMode() === 'toml'
-                ? 'bg-zinc-800 text-zinc-100 font-semibold'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-surface-elevated text-title font-semibold'
+                : 'text-muted hover:text-title'
             }`}
           >
             config.toml
           </button>
           <button
             onClick={() => setViewMode('categories')}
-            class={`rounded px-3 py-1 font-mono text-xs transition-colors ${
+            class={`flex-1 sm:flex-none rounded px-3 py-1.5 sm:py-1 font-mono text-xs transition-colors text-center ${
               viewMode() === 'categories'
-                ? 'bg-zinc-800 text-zinc-100 font-semibold'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-surface-elevated text-title font-semibold'
+                : 'text-muted hover:text-title'
             }`}
           >
             70+ Formats Matrix
@@ -123,30 +123,30 @@ export default function ConfigExplorer() {
 
       {/* Content Area */}
       {viewMode() === 'toml' ? (
-        <div class="p-4 sm:p-6 overflow-x-auto bg-zinc-950">
-          <pre class="font-mono text-xs leading-relaxed text-zinc-300">
+        <div class="p-3 sm:p-6 overflow-x-auto no-scrollbar touch-scroll bg-surface-root">
+          <pre class="font-mono text-[11px] sm:text-xs leading-relaxed text-body">
             <code>{TOML_CONTENT}</code>
           </pre>
         </div>
       ) : (
-        <div class="p-4 sm:p-6 bg-zinc-900">
+        <div class="p-3 sm:p-6 bg-surface-card">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <For each={CATEGORIES}>
               {(cat) => (
-                <div class="rounded border border-zinc-800 bg-zinc-950 p-4 space-y-2.5">
+                <div class="rounded border border-line-default bg-surface-root p-3.5 sm:p-4 space-y-2">
                   <div class="flex items-center justify-between">
-                    <span class="font-mono text-xs font-semibold text-zinc-100">{cat.name}</span>
-                    <span class="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                    <span class="font-mono text-xs font-semibold text-title">{cat.name}</span>
+                    <span class="font-mono text-[11px] text-dim">
                       {cat.count}
                     </span>
                   </div>
-                  <div class="text-[11px] font-mono text-cyan-400">
-                    Target: <span class="text-zinc-300">{cat.dest}</span>
+                  <div class="text-[11px] font-mono text-primary">
+                    Target: <span class="text-body">{cat.dest}</span>
                   </div>
-                  <div class="flex flex-wrap gap-1 pt-1">
+                  <div class="flex flex-wrap gap-1.5 pt-1">
                     <For each={cat.examples}>
                       {(ext) => (
-                        <span class="rounded bg-zinc-900 border border-zinc-800/80 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                        <span class="font-mono text-[11px] text-muted">
                           .{ext}
                         </span>
                       )}
@@ -165,9 +165,9 @@ export default function ConfigExplorer() {
       )}
 
       {/* Footer bar */}
-      <div class="border-t border-zinc-800 bg-zinc-950 px-4 py-2.5 font-mono text-xs text-zinc-500 flex items-center justify-between">
-        <span>Generate scaffold via: <code class="text-zinc-300">tidy init</code></span>
-        <span>Magic-byte fallback via <code class="text-zinc-300">infer</code></span>
+      <div class="border-t border-line-default bg-surface-root px-3.5 sm:px-4 py-2.5 font-mono text-[10px] sm:text-xs text-dim flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+        <span>Generate scaffold: <code class="text-body">tidy init</code></span>
+        <span>Magic-byte fallback via <code class="text-body">infer</code></span>
       </div>
     </div>
   );

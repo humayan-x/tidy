@@ -7,7 +7,7 @@ interface Props {
 }
 
 const {
-  title = "tidy — Blazing-Fast Local File Organizer & Watcher in Rust",
+  title = "tidy - Blazing-Fast Local File Organizer & Watcher in Rust",
   description = "A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS. Guaranteed non-destructive operations with SQLite undo ledger.",
 } = Astro.props;
 ---
@@ -16,7 +16,7 @@ const {
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -30,15 +30,15 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <!-- Developer Fonts -->
+    <!-- Developer Fonts: Geist & Geist Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col font-sans antialiased selection:bg-zinc-800 selection:text-zinc-100">
+  <body class="bg-surface-root text-title min-h-screen flex flex-col font-sans antialiased selection:bg-surface-elevated selection:text-title overflow-x-hidden">
     <slot />
   </body>
 </html>

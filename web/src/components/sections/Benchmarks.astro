@@ -2,69 +2,87 @@
 import { Icon } from 'astro-icon/components';
 ---
 
-<section id="benchmarks" class="border-b border-zinc-800 bg-zinc-950 py-16 sm:py-20">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-6 border-b border-zinc-850">
+<section id="benchmarks" class="border-b border-line-default bg-surface-root py-12 sm:py-20">
+  <div class="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 sm:pb-6 border-b border-line-subtle">
       <div>
-        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-cyan-400">
+        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
           Benchmarks
         </span>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+        <h2 class="mt-1.5 sm:mt-2 text-xl font-bold tracking-tight text-title sm:text-3xl">
           Resource Footprint
         </h2>
       </div>
-      <div class="font-mono text-xs text-zinc-400">
+      <div class="font-mono text-[11px] sm:text-xs text-muted">
         Measured on Linux 6.8 x86_64, idle background watcher
       </div>
     </div>
 
+    <!-- Mobile Swipe Indicator -->
+    <div class="mt-4 flex items-center justify-between text-[11px] font-mono text-dim sm:hidden px-1">
+      <span class="text-primary">Swipe horizontally to compare</span>
+      <span>5 platforms</span>
+    </div>
+
     <!-- Comparative Table -->
-    <div class="mt-8 overflow-x-auto rounded border border-zinc-800 bg-zinc-900">
+    <div class="mt-2 sm:mt-8 overflow-x-auto no-scrollbar touch-scroll rounded border border-line-default bg-surface-card shadow-xl">
       <table class="w-full text-left font-mono text-xs">
         <thead>
-          <tr class="border-b border-zinc-800 bg-zinc-950 text-zinc-400 whitespace-nowrap">
-            <th class="py-3 px-4 font-medium">Metric</th>
-            <th class="py-3 px-4 font-medium text-cyan-400">tidy (Rust)</th>
-            <th class="py-3 px-4 font-medium text-zinc-400">Python (Watchdog)</th>
-            <th class="py-3 px-4 font-medium text-zinc-400">Node.js (Chokidar)</th>
-            <th class="py-3 px-4 font-medium text-zinc-400">Shell Script</th>
+          <tr class="border-b border-line-default bg-surface-root text-muted whitespace-nowrap">
+            <th class="sticky left-0 z-10 bg-surface-root py-3 px-3.5 sm:px-4 font-medium border-r border-line-subtle sm:border-r-0">
+              Metric
+            </th>
+            <th class="py-3 px-4 font-medium text-primary">tidy (Rust)</th>
+            <th class="py-3 px-4 font-medium text-muted">Python (Watchdog)</th>
+            <th class="py-3 px-4 font-medium text-muted">Node.js (Chokidar)</th>
+            <th class="py-3 px-4 font-medium text-muted">Shell Script</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-zinc-800/60 whitespace-nowrap">
-          <tr class="hover:bg-zinc-850/50 transition-colors">
-            <td class="py-3 px-4 font-medium text-zinc-200">Idle Memory (RSS)</td>
-            <td class="py-3 px-4 text-cyan-300 font-semibold bg-cyan-950/20">~3.5 MB</td>
-            <td class="py-3 px-4 text-zinc-400">~45–60 MB</td>
-            <td class="py-3 px-4 text-zinc-400">~65–90 MB</td>
-            <td class="py-3 px-4 text-zinc-400">~15 MB</td>
+        <tbody class="divide-y divide-line-subtle whitespace-nowrap">
+          <tr class="hover:bg-surface-subtle transition-colors">
+            <td class="sticky left-0 z-10 bg-surface-root py-3 px-3.5 sm:px-4 font-medium text-title border-r border-line-subtle sm:border-r-0">
+              Idle Memory (RSS)
+            </td>
+            <td class="py-3 px-4 text-primary font-semibold bg-primary/10">~3.5 MB</td>
+            <td class="py-3 px-4 text-muted">~45–60 MB</td>
+            <td class="py-3 px-4 text-muted">~65–90 MB</td>
+            <td class="py-3 px-4 text-muted">~15 MB</td>
           </tr>
-          <tr class="hover:bg-zinc-850/50 transition-colors">
-            <td class="py-3 px-4 font-medium text-zinc-200">Startup Latency</td>
-            <td class="py-3 px-4 text-cyan-300 font-semibold bg-cyan-950/20">&lt; 2 ms</td>
-            <td class="py-3 px-4 text-zinc-400">140 ms</td>
-            <td class="py-3 px-4 text-zinc-400">220 ms</td>
-            <td class="py-3 px-4 text-zinc-400">12 ms</td>
+          <tr class="hover:bg-surface-subtle transition-colors">
+            <td class="sticky left-0 z-10 bg-surface-root py-3 px-3.5 sm:px-4 font-medium text-title border-r border-line-subtle sm:border-r-0">
+              Startup Latency
+            </td>
+            <td class="py-3 px-4 text-primary font-semibold bg-primary/10">&lt; 2 ms</td>
+            <td class="py-3 px-4 text-muted">140 ms</td>
+            <td class="py-3 px-4 text-muted">220 ms</td>
+            <td class="py-3 px-4 text-muted">12 ms</td>
           </tr>
-          <tr class="hover:bg-zinc-850/50 transition-colors">
-            <td class="py-3 px-4 font-medium text-zinc-200">Binary Size / Runtime</td>
-            <td class="py-3 px-4 text-cyan-300 font-semibold bg-cyan-950/20">&lt; 4.8 MB (Static)</td>
-            <td class="py-3 px-4 text-zinc-400">Python runtime (~80MB)</td>
-            <td class="py-3 px-4 text-zinc-400">Node runtime (~120MB)</td>
-            <td class="py-3 px-4 text-zinc-400">Bash + coreutils</td>
+          <tr class="hover:bg-surface-subtle transition-colors">
+            <td class="sticky left-0 z-10 bg-surface-root py-3 px-3.5 sm:px-4 font-medium text-title border-r border-line-subtle sm:border-r-0">
+              Binary Size / Runtime
+            </td>
+            <td class="py-3 px-4 text-primary font-semibold bg-primary/10">&lt; 4.8 MB (Static)</td>
+            <td class="py-3 px-4 text-muted">Python runtime (~80MB)</td>
+            <td class="py-3 px-4 text-muted">Node runtime (~120MB)</td>
+            <td class="py-3 px-4 text-muted">Bash + coreutils</td>
           </tr>
-          <tr class="hover:bg-zinc-850/50 transition-colors">
-            <td class="py-3 px-4 font-medium text-zinc-200">Background CPU Idle</td>
-            <td class="py-3 px-4 text-cyan-300 font-semibold bg-cyan-950/20">&lt; 0.05%</td>
-            <td class="py-3 px-4 text-zinc-400">~1.2%</td>
-            <td class="py-3 px-4 text-zinc-400">~1.6%</td>
-            <td class="py-3 px-4 text-zinc-400">~0.5%</td>
+          <tr class="hover:bg-surface-subtle transition-colors">
+            <td class="sticky left-0 z-10 bg-surface-root py-3 px-3.5 sm:px-4 font-medium text-title border-r border-line-subtle sm:border-r-0">
+              Background CPU Idle
+            </td>
+            <td class="py-3 px-4 text-primary font-semibold bg-primary/10">&lt; 0.05%</td>
+            <td class="py-3 px-4 text-muted">~1.2%</td>
+            <td class="py-3 px-4 text-muted">~1.6%</td>
+            <td class="py-3 px-4 text-muted">~0.5%</td>
           </tr>
-          <tr class="hover:bg-zinc-850/50 transition-colors">
-            <td class="py-3 px-4 font-medium text-zinc-200">Transactional Undo</td>
-            <td class="py-3 px-4 text-cyan-300 font-semibold bg-cyan-950/20">SQLite Ledger</td>
-            <td class="py-3 px-4 text-zinc-500">None</td>
-            <td class="py-3 px-4 text-zinc-500">None</td>
-            <td class="py-3 px-4 text-zinc-500">None</td>
+          <tr class="hover:bg-surface-subtle transition-colors">
+            <td class="sticky left-0 z-10 bg-surface-root py-3 px-3.5 sm:px-4 font-medium text-title border-r border-line-subtle sm:border-r-0">
+              Transactional Undo
+            </td>
+            <td class="py-3 px-4 text-primary font-semibold bg-primary/10">SQLite Ledger</td>
+            <td class="py-3 px-4 text-dim">None</td>
+            <td class="py-3 px-4 text-dim">None</td>
+            <td class="py-3 px-4 text-dim">None</td>
           </tr>
         </tbody>
       </table>
