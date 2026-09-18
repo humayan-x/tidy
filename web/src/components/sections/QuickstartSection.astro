@@ -1,0 +1,161 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const STEPS = [
+  {
+    step: '01',
+    title: 'Install & Approve Script',
+    desc: 'Install globally via npm (with script permission) or direct curl shell script.',
+    commands: [
+      { label: 'npm (npm 10.9+)', code: 'npm install -g --allow-scripts=@humayan-x/tidy @humayan-x/tidy' },
+      { label: 'curl (direct binary)', code: 'curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh' },
+    ],
+  },
+  {
+    step: '02',
+    title: 'Dry-Run vs Real Run',
+    desc: 'Simulate first to see planned moves safely, then execute live on Downloads.',
+    commands: [
+      { label: 'Preview Downloads (safe)', code: 'tidy run --path ~/Downloads --dry-run' },
+      { label: 'Real run on Downloads', code: 'tidy run --path ~/Downloads' },
+    ],
+  },
+  {
+    step: '03',
+    title: 'Target Specific Folder',
+    desc: 'Run on your current directory or point tidy to any arbitrary folder.',
+    commands: [
+      { label: 'Current working directory', code: 'tidy run' },
+      { label: 'Target custom folder', code: 'tidy run --path ~/Projects/Assets' },
+    ],
+  },
+  {
+    step: '04',
+    title: 'Configure Rules & Folders',
+    desc: 'Scaffold and edit the default TOML configuration to define custom rules.',
+    commands: [
+      { label: 'Generate default config', code: 'tidy init' },
+      { label: 'Config path', code: '~/.config/tidy/config.toml' },
+    ],
+  },
+  {
+    step: '05',
+    title: 'Run in Background (Daemon)',
+    desc: 'Daemon defaults to watching ~/Downloads on boot; override with --path.',
+    commands: [
+      { label: 'Watch ~/Downloads (default)', code: 'tidy service enable' },
+      { label: 'Watch custom folder', code: 'tidy service enable --path ~/Desktop' },
+      { label: 'Check status & memory', code: 'tidy service status' },
+      { label: 'Follow live logs', code: 'tidy service logs -f' },
+    ],
+  },
+  {
+    step: '06',
+    title: 'Instant Undo & Rollback',
+    desc: 'Revert any single or multi-run batch safely via embedded SQLite ledger.',
+    commands: [
+      { label: 'Revert last operation', code: 'tidy undo' },
+      { label: 'Revert last 3 batches', code: 'tidy undo --last 3' },
+      { label: 'Preview undo rollback', code: 'tidy undo --dry-run' },
+    ],
+  },
+];
+---
+
+<section id="quickstart" class="border-b border-line-default bg-surface-root py-12 sm:py-20">
+  <div class="mx-auto max-w-6xl px-3 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 sm:pb-6 border-b border-line-subtle">
+      <div>
+        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
+          Quickstart Workflow
+        </span>
+        <h2 class="mt-1.5 sm:mt-2 text-xl font-bold tracking-tight text-title sm:text-3xl">
+          Essential Commands
+        </h2>
+      </div>
+      <div class="font-mono text-[11px] sm:text-xs text-muted">
+        Zero fluff • Complete CLI lifecycle in 6 steps
+      </div>
+    </div>
+
+    <!-- 6-Card Workflow Grid -->
+    <div class="mt-6 sm:mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {
+        STEPS.map((item) => (
+          <div class="flex flex-col justify-between rounded border border-line-default bg-surface-card p-4 sm:p-5 transition-colors hover:border-line-strong">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs font-bold text-primary">
+                  STEP {item.step}
+                </span>
+                <span class="font-mono text-[11px] text-dim">
+                  CLI
+                </span>
+              </div>
+
+              <h3 class="mt-2.5 font-mono text-sm font-semibold text-title">
+                {item.title}
+              </h3>
+              <p class="mt-1 text-xs text-muted leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+
+            <div class="mt-4 space-y-2 border-t border-line-subtle pt-3">
+              {item.commands.map((cmd) => (
+                <div class="space-y-1">
+                  <div class="text-[10px] font-mono text-dim">{cmd.label}:</div>
+                  <div class="group flex items-center justify-between gap-2 rounded border border-line-subtle bg-surface-root px-2.5 py-1.5 font-mono text-[11px]">
+                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar touch-scroll min-w-0 flex-1">
+                      <span class="text-primary select-none shrink-0">$</span>
+                      <code class="whitespace-nowrap select-all text-body">{cmd.code}</code>
+                    </div>
+                    <button
+                      type="button"
+                      class="quickstart-copy-btn flex items-center justify-center p-1 rounded text-muted hover:text-title hover:bg-surface-elevated transition-colors shrink-0 min-h-[26px] min-w-[26px]"
+                      data-copy={cmd.code}
+                      aria-label="Copy command"
+                      title="Copy command"
+                    >
+                      <Icon name="tabler:copy" class="w-3.5 h-3.5 copy-icon" />
+                      <Icon name="tabler:check" class="w-3.5 h-3.5 check-icon text-primary hidden" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  function initQuickstartCopy() {
+    document.querySelectorAll('.quickstart-copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const code = btn.getAttribute('data-copy');
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code);
+          const copyIcon = btn.querySelector('.copy-icon');
+          const checkIcon = btn.querySelector('.check-icon');
+          if (copyIcon && checkIcon) {
+            copyIcon.classList.add('hidden');
+            checkIcon.classList.remove('hidden');
+            setTimeout(() => {
+              copyIcon.classList.remove('hidden');
+              checkIcon.classList.add('hidden');
+            }, 1800);
+          }
+        } catch (err) {
+          console.error('Failed to copy', err);
+        }
+      });
+    });
+  }
+
+  initQuickstartCopy();
+  document.addEventListener('astro:page-load', initQuickstartCopy);
+</script>
