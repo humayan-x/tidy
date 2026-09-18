@@ -22,7 +22,7 @@ const OPTIONS: InstallOption[] = [
     key: 'npx',
     label: 'npx / npm',
     command: 'npx @humayan-x/tidy run --dry-run',
-    subtext: 'Run immediately without prior installation, or install globally via: npm install -g @humayan-x/tidy',
+    subtext: 'Run immediately without prior installation, or install globally via npm (use --allow-scripts on npm 10.9+).',
   },
   {
     key: 'cargo',

@@ -105,14 +105,11 @@ npm install -g @humayan-x/tidy
 tidy run
 ```
 
-### Package Managers
-```bash
-# Homebrew (macOS / Linux)
-brew install humayan-x/tap/tidy
-
-# Arch Linux (AUR)
-yay -S tidy-bin
-```
+> **Note for npm 10.9+ / Node 22+**:
+> If npm prompts or warns about install scripts, supply `--allow-scripts` so the native binary is downloaded during installation:
+> ```bash
+> npm install -g --allow-scripts=@humayan-x/tidy @humayan-x/tidy
+> ```
 
 ### From Source (Cargo)
 Ensure you have Rust (2021 edition, 1.75+) installed:

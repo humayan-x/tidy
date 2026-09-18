@@ -54,7 +54,9 @@ if (!fs.existsSync(binaryPath)) {
 
   if (!fs.existsSync(binaryPath)) {
     console.error('[tidy] Error: Native binary could not be located or downloaded.');
-    console.error('[tidy] Please install directly via:');
+    console.error('[tidy] If npm blocked postinstall scripts, reinstall with:');
+    console.error('       npm install -g --allow-scripts=@humayan-x/tidy @humayan-x/tidy');
+    console.error('[tidy] Or install directly via shell script:');
     console.error('       curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh');
     process.exit(1);
   }

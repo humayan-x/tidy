@@ -32,6 +32,12 @@ npx @humayan-x/tidy undo
 npm install -g @humayan-x/tidy
 ```
 
+> **Note for npm 10.9+ / Node 22+**:
+> If npm prompts or warns about install scripts, run with `--allow-scripts` so the native binary is downloaded during installation:
+> ```bash
+> npm install -g --allow-scripts=@humayan-x/tidy @humayan-x/tidy
+> ```
+
 Once installed, use `tidy` directly:
 
 ```bash
