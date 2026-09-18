@@ -23,7 +23,7 @@ const INITIAL_FILES: FileItem[] = [
     id: '1',
     name: 'invoice_2026_q1.pdf',
     originalPath: '~/Downloads/invoice_2026_q1.pdf',
-    organizedPath: '~/Downloads/Documents/PDF/invoice_2026_q1.pdf',
+    organizedPath: '~/Downloads/Documents/PDFs/invoice_2026_q1.pdf',
     category: 'Documents',
     ext: 'pdf',
     size: '1.4 MB',
@@ -33,7 +33,7 @@ const INITIAL_FILES: FileItem[] = [
     id: '2',
     name: 'quarterly_report.xlsx',
     originalPath: '~/Downloads/quarterly_report.xlsx',
-    organizedPath: '~/Downloads/Documents/XLSX/quarterly_report.xlsx',
+    organizedPath: '~/Downloads/Documents/Excel/quarterly_report.xlsx',
     category: 'Documents',
     ext: 'xlsx',
     size: '840 KB',
@@ -262,9 +262,9 @@ export default function OrganizerSimulator() {
                 <div class="flex items-center gap-2">
                   <span class="text-muted text-[10px]">{file.size}</span>
                   <Show when={file.isDownloadGuard}>
-                    <span class="inline-flex items-center gap-1 rounded border border-amber-900/60 bg-amber-950/40 px-1.5 py-0.5 text-[10px] text-amber-300">
+                    <span class="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-950/60 px-1.5 py-0.5 text-[10px] text-amber-300 shadow-sm animate-pulse">
                       <span class="w-2.5 h-2.5 flex items-center justify-center [&>svg]:w-2.5 [&>svg]:h-2.5" innerHTML={iconAlertTriangle} />
-                      Guard
+                      {isOrganized() ? 'Shielded' : 'Writing (48%)'}
                     </span>
                   </Show>
                   <Show when={file.isCollision}>
@@ -319,13 +319,33 @@ export default function OrganizerSimulator() {
                       {isOrganized() ? (file.isDownloadGuard ? 'Protected in Root' : file.category + '/' + file.ext.toUpperCase()) : 'Downloads (root)'}
                     </span>
                   </td>
-                  <td class="py-2.5 px-4 text-muted">{file.size}</td>
+                  <td class="py-2.5 px-4 text-muted">
+                    <Show
+                      when={file.isDownloadGuard}
+                      fallback={<span>{file.size}</span>}
+                    >
+                      <div class="flex flex-col gap-1 w-32">
+                        <div class="flex items-center justify-between text-[10px] font-mono">
+                          <span class="text-amber-300">1.2 / 2.4 GB</span>
+                          <span class="text-amber-400 font-semibold animate-pulse">48%</span>
+                        </div>
+                        <div class="h-1.5 w-full rounded-full bg-surface-root overflow-hidden border border-amber-900/40">
+                          <div class="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full w-[48%] animate-pulse" />
+                        </div>
+                      </div>
+                    </Show>
+                  </td>
                   <td class="py-2.5 px-4">
                     <Show when={file.isDownloadGuard}>
-                      <span class="inline-flex items-center gap-1 rounded border border-amber-900/60 bg-amber-950/40 px-2 py-0.5 text-[11px] text-amber-300">
-                        <span class="w-3 h-3 flex items-center justify-center [&>svg]:w-3 [&>svg]:h-3" innerHTML={iconAlertTriangle} />
-                        Download Guard
-                      </span>
+                      <div class="flex flex-col gap-0.5">
+                        <span class="inline-flex items-center gap-1 rounded border border-amber-500/40 bg-amber-950/60 px-2 py-0.5 text-[11px] text-amber-300 shadow-sm">
+                          <span class="w-3 h-3 flex items-center justify-center [&>svg]:w-3 [&>svg]:h-3 animate-pulse" innerHTML={iconAlertTriangle} />
+                          Download Guard
+                        </span>
+                        <span class="text-[10px] text-amber-400/80 pl-0.5">
+                          {isOrganized() ? 'Shielded in root (untouched)' : 'Active write lock detected'}
+                        </span>
+                      </div>
                     </Show>
                     <Show when={file.isCollision}>
                       <span class={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] ${

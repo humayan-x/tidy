@@ -97,7 +97,7 @@ if [ -z "$TIDY_VERSION" ]; then
         VERSION=$(printf "%s" "$LATEST_JSON" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
     fi
     if [ -z "$VERSION" ]; then
-        VERSION="0.2.0"
+        VERSION="0.2.1"
         log_warn "Could not query GitHub API; falling back to default v${VERSION}."
     fi
 else

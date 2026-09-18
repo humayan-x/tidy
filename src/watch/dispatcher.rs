@@ -75,10 +75,14 @@ impl WatchDispatcher {
     /// Creates a new dispatcher instance with an explicit ledger.
     pub fn with_ledger(config: WatchConfig, tidy_config: &Config, ledger: Ledger) -> Result<Self> {
         let rules = tidy_config.compile()?;
+        let grace_duration = Duration::from_secs(rules.grace_period_secs);
         let classifier = Classifier::new(rules);
         let active_destinations = classifier.active_destinations().clone();
-        let tracker =
-            PendingFileTracker::new(config.required_stable_ticks, Duration::from_secs(600));
+        let tracker = PendingFileTracker::new_with_grace_period(
+            config.required_stable_ticks,
+            Duration::from_secs(600),
+            grace_duration,
+        );
 
         Ok(Self {
             config,

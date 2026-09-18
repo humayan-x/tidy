@@ -117,7 +117,12 @@ impl Classifier {
             };
         }
 
-        if self.rules.is_ignored(file_name) {
+        let rel_str = file_path
+            .strip_prefix(root_dir)
+            .ok()
+            .and_then(|p| p.to_str());
+
+        if self.rules.is_path_ignored(file_name, rel_str) {
             return ClassificationResult::Ignore {
                 reason: IgnoreReason::Pattern,
             };
@@ -133,12 +138,7 @@ impl Classifier {
         // 5. Match normalized extension against category tables
         if let Some(ref ext) = extension {
             if let Some(category) = self.rules.extension_to_category.get(ext) {
-                let category_folder = self.rules.get_destination_folder(category);
-                let target_subfolder = if self.rules.nest_by_extension {
-                    format!("{}/{}", category_folder, ext.to_uppercase())
-                } else {
-                    category_folder
-                };
+                let target_subfolder = self.rules.resolve_target_subfolder(category, ext);
                 let target_path = root_dir.join(&target_subfolder).join(file_name);
                 return ClassificationResult::Move {
                     category: category.clone(),
@@ -162,12 +162,9 @@ impl Classifier {
                 .or_else(|| sniffed.suggested_category.map(String::from));
 
             if let Some(category) = matched_category {
-                let category_folder = self.rules.get_destination_folder(&category);
-                let target_subfolder = if self.rules.nest_by_extension {
-                    format!("{}/{}", category_folder, sniffed.extension.to_uppercase())
-                } else {
-                    category_folder
-                };
+                let target_subfolder = self
+                    .rules
+                    .resolve_target_subfolder(&category, &sniffed.extension);
                 let target_path = root_dir.join(&target_subfolder).join(file_name);
                 return ClassificationResult::Move {
                     category,
@@ -370,5 +367,114 @@ mod tests {
 
         let res = classifier.classify(&file_path, root);
         assert_eq!(res, ClassificationResult::Unmatched);
+    }
+
+    #[test]
+    fn test_classify_human_readable_subfolders() {
+        let classifier = setup_classifier();
+        let root = Path::new("/downloads");
+
+        // PDFs
+        let res = classifier.classify(Path::new("/downloads/contract.pdf"), root);
+        match res {
+            ClassificationResult::Move { category, target_subfolder, .. } => {
+                assert_eq!(category, "Documents");
+                assert_eq!(target_subfolder, "Documents/PDFs");
+            }
+            _ => panic!("Expected Move for contract.pdf"),
+        }
+
+        // Word (.doc and .docx)
+        for name in &["memo.doc", "report.docx"] {
+            let res = classifier.classify(Path::new(&format!("/downloads/{}", name)), root);
+            match res {
+                ClassificationResult::Move { category, target_subfolder, .. } => {
+                    assert_eq!(category, "Documents");
+                    assert_eq!(target_subfolder, "Documents/Word");
+                }
+                _ => panic!("Expected Move for {}", name),
+            }
+        }
+
+        // Excel (.xls, .xlsx, .ods)
+        for name in &["budget.xls", "sales.xlsx", "calc.ods"] {
+            let res = classifier.classify(Path::new(&format!("/downloads/{}", name)), root);
+            match res {
+                ClassificationResult::Move { category, target_subfolder, .. } => {
+                    assert_eq!(category, "Documents");
+                    assert_eq!(target_subfolder, "Documents/Excel");
+                }
+                _ => panic!("Expected Move for {}", name),
+            }
+        }
+
+        // PowerPoint (.ppt, .pptx)
+        for name in &["slides.ppt", "pitch.pptx"] {
+            let res = classifier.classify(Path::new(&format!("/downloads/{}", name)), root);
+            match res {
+                ClassificationResult::Move { category, target_subfolder, .. } => {
+                    assert_eq!(category, "Documents");
+                    assert_eq!(target_subfolder, "Documents/PowerPoint");
+                }
+                _ => panic!("Expected Move for {}", name),
+            }
+        }
+    }
+
+    #[test]
+    fn test_classify_unmapped_formats_fallback_to_uppercase() {
+        let classifier = setup_classifier();
+        let root = Path::new("/downloads");
+
+        let cases = [
+            ("notes.txt", "Documents", "Documents/TXT"),
+            ("document.odt", "Documents", "Documents/ODT"),
+            ("slides.odp", "Documents", "Documents/ODP"),
+            ("readme.md", "Documents", "Documents/MD"),
+            ("book.epub", "Documents", "Documents/EPUB"),
+            ("data.csv", "Documents", "Documents/CSV"),
+            ("photo.jpg", "Images", "Images/JPG"),
+            ("song.mp3", "Audio", "Audio/MP3"),
+            ("archive.tar.gz", "Archives", "Archives/TAR.GZ"),
+            ("script.py", "Code", "Code/PY"),
+        ];
+
+        for (filename, expected_cat, expected_subfolder) in cases {
+            let res = classifier.classify(Path::new(&format!("/downloads/{}", filename)), root);
+            match res {
+                ClassificationResult::Move { category, target_subfolder, .. } => {
+                    assert_eq!(category, expected_cat);
+                    assert_eq!(target_subfolder, expected_subfolder);
+                }
+                _ => panic!("Expected Move for {}", filename),
+            }
+        }
+    }
+
+    #[test]
+    fn test_classify_sniffed_pdf_uses_readable_folder() {
+        let classifier = setup_classifier();
+        let temp_dir = tempfile::tempdir().unwrap();
+        let root = temp_dir.path();
+
+        // Create an extensionless file with PDF magic bytes (%PDF-1.5)
+        let file_path = root.join("my_document");
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(b"%PDF-1.5\nfake pdf content").unwrap();
+
+        let res = classifier.classify(&file_path, root);
+        match res {
+            ClassificationResult::Move {
+                category,
+                target_subfolder,
+                extension,
+                ..
+            } => {
+                assert_eq!(category, "Documents");
+                assert_eq!(target_subfolder, "Documents/PDFs");
+                assert_eq!(extension.as_deref(), Some("pdf"));
+            }
+            _ => panic!("Expected sniffing to classify PDF into Documents/PDFs"),
+        }
     }
 }

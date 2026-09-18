@@ -1,6 +1,7 @@
 pub mod completions;
 pub mod config_cmd;
 pub mod format;
+pub mod history_cmd;
 pub mod run;
 pub mod status;
 pub mod undo;
@@ -12,9 +13,10 @@ use std::path::PathBuf;
 #[derive(Parser, Debug)]
 #[command(
     name = "tidy",
+    bin_name = "tidy",
     author,
     version,
-    about = "A blazing-fast, zero-dependency, local-first file organizer and watcher for Linux and macOS.",
+    about = "A blazing-fast, local-first file organizer and watcher in Rust with zero runtime dependencies.",
     long_about = None
 )]
 pub struct Cli {
@@ -38,8 +40,11 @@ pub enum Commands {
     /// Start the long-running resident filesystem watcher daemon
     Watch(WatchArgs),
 
-    /// Roll back the most recent operation batch using the local ledger
+    /// Roll back the most recent operation batch using the local ledger (LIFO order)
     Undo(UndoArgs),
+
+    /// Inspect and prune the transaction ledger history
+    History(HistoryArgs),
 
     /// Report watched directories, rule summaries, and recent activity
     Status,
@@ -85,6 +90,14 @@ pub struct RunArgs {
     /// Scan target directory recursively
     #[arg(short, long)]
     pub recursive: bool,
+
+    /// Organize directly into top-level category folders without extension subfolders
+    #[arg(long)]
+    pub flat: bool,
+
+    /// Exclude files or folders matching a glob pattern (e.g. 'work/**', '*.tmp')
+    #[arg(short = 'e', long = "exclude")]
+    pub exclude: Vec<String>,
 }
 
 #[derive(Args, Debug)]
@@ -97,9 +110,21 @@ pub struct WatchArgs {
     #[arg(short, long)]
     pub recursive: bool,
 
+    /// Organize directly into top-level category folders without extension subfolders
+    #[arg(long)]
+    pub flat: bool,
+
+    /// Exclude files or folders matching a glob pattern (e.g. 'work/**', '*.tmp')
+    #[arg(short = 'e', long = "exclude")]
+    pub exclude: Vec<String>,
+
     /// Debounce duration in milliseconds (overrides config)
     #[arg(long)]
     pub debounce: Option<u64>,
+
+    /// Grace period in seconds after last modification before moving a file
+    #[arg(long)]
+    pub grace_period: Option<u64>,
 
     /// Perform an initial single-pass scan to organize pre-existing files on startup
     #[arg(long)]
@@ -108,11 +133,11 @@ pub struct WatchArgs {
 
 #[derive(Args, Debug)]
 pub struct UndoArgs {
-    /// Specific Run UUID to roll back (defaults to the most recent run)
+    /// Specific Run UUID to roll back (defaults to the most recent run in LIFO order)
     #[arg(long)]
     pub run_id: Option<String>,
 
-    /// Number of recent runs to roll back sequentially
+    /// Number of recent runs to roll back sequentially in LIFO order
     #[arg(long, short = 'n')]
     pub last: Option<usize>,
 
@@ -123,6 +148,25 @@ pub struct UndoArgs {
     /// Preview the undo operations without modifying disk or database
     #[arg(long)]
     pub dry_run: bool,
+}
+
+#[derive(Args, Debug)]
+pub struct HistoryArgs {
+    #[command(subcommand)]
+    pub action: HistoryAction,
+}
+
+#[derive(Subcommand, Debug)]
+pub enum HistoryAction {
+    /// Report ledger statistics (total runs, recorded operations, database size)
+    Info,
+
+    /// Prune old runs and operations from history to reclaim disk space
+    Prune {
+        /// Delete runs older than the specified number of days (default: 30)
+        #[arg(long, default_value_t = 30)]
+        days: u32,
+    },
 }
 
 #[derive(Args, Debug)]

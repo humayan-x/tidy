@@ -41,7 +41,8 @@ pub fn execute_run(args: &RunArgs, custom_config: Option<&Path>) -> Result<()> {
     };
 
     let config = Config::load_or_default(custom_config)?;
-    let rules = config.compile()?;
+    let mut rules = config.compile()?;
+    rules.apply_cli_overrides(args.flat, &args.exclude, None)?;
     let classifier = Classifier::new(rules);
     let planned_moves = scan_directory(&target_dir, args.recursive, &classifier)?;
 

@@ -9,7 +9,7 @@ import { Icon } from 'astro-icon/components';
       <!-- Top Release Status (Clean, unboxed) -->
       <div class="inline-flex items-center gap-2 font-mono text-xs text-muted">
         <span class="flex h-2 w-2 rounded-full bg-primary"></span>
-        <span class="text-body">tidy v0.2.0</span>
+        <span class="text-body">tidy v0.2.1</span>
         <span class="text-dim">/</span>
         <span class="text-muted">Rust 1.75+</span>
       </div>
@@ -45,43 +45,46 @@ import { Icon } from 'astro-icon/components';
         </a>
       </div>
 
-      <!-- Quick Command Bar: Wide container, guaranteed single-line display -->
+      <!-- Quick Command Bar: Primary curl installer with npx convenience note -->
       <div class="mt-6 sm:mt-8 w-full max-w-2xl sm:max-w-3xl px-2 sm:px-0">
         <div class="flex items-center justify-between gap-2.5 sm:gap-4 rounded border border-line-default bg-surface-card px-3 py-2 sm:px-4 sm:py-3 font-mono text-[11px] xs:text-xs sm:text-sm text-body shadow-inner">
           <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar touch-scroll py-0.5 text-left">
             <span class="text-primary select-none">$</span>
             <span class="text-title select-all whitespace-nowrap">
-              npx @humayan-x/tidy run --path ~/Downloads --dry-run
+              curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh
             </span>
           </div>
           <button
             id="copy-hero-btn"
             class="flex items-center gap-1.5 rounded border border-line-strong bg-surface-elevated px-2.5 py-1 text-xs text-body transition-colors hover:bg-surface-hover hover:text-title shrink-0 select-none min-h-[30px]"
             title="Copy command"
-            onclick="navigator.clipboard.writeText('npx @humayan-x/tidy run --path ~/Downloads --dry-run'); this.querySelector('.copy-txt').textContent = 'Copied'; setTimeout(() => this.querySelector('.copy-txt').textContent = 'Copy', 2000);"
+            onclick="navigator.clipboard.writeText('curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh'); this.querySelector('.copy-txt').textContent = 'Copied'; setTimeout(() => this.querySelector('.copy-txt').textContent = 'Copy', 2000);"
           >
             <Icon name="tabler:copy" class="w-3.5 h-3.5 text-muted" />
             <span class="copy-txt">Copy</span>
           </button>
         </div>
+        <p class="mt-2 text-xs text-dim text-center">
+          Or try immediately without installing: <code class="text-body bg-surface-card border border-line-subtle px-1.5 py-0.5 rounded font-mono text-[11px]">npx @humayan-x/tidy run --dry-run</code>
+        </p>
       </div>
 
       <!-- Architectural Spec Badges (Clean, unboxed) -->
       <div class="mt-10 sm:mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6 w-full max-w-3xl border-t border-line-subtle pt-8 px-2 sm:px-0">
         <div class="text-left">
           <div class="flex items-center gap-1.5 sm:gap-2 text-muted">
-            <Icon name="tabler:cpu" class="w-4 h-4 text-muted shrink-0" />
-            <span class="font-mono text-xs sm:text-sm font-semibold text-title truncate">&lt; 5 MB</span>
+            <Icon name="tabler:package" class="w-4 h-4 text-muted shrink-0" />
+            <span class="font-mono text-xs sm:text-sm font-semibold text-title truncate">Disk: &lt; 5 MB</span>
           </div>
-          <p class="mt-1 text-[11px] sm:text-xs text-dim">Static binary</p>
+          <p class="mt-1 text-[11px] sm:text-xs text-dim">Static binary (zero runtime deps)</p>
         </div>
 
         <div class="text-left">
           <div class="flex items-center gap-1.5 sm:gap-2 text-muted">
-            <Icon name="tabler:bolt" class="w-4 h-4 text-primary shrink-0" />
-            <span class="font-mono text-xs sm:text-sm font-semibold text-title truncate">~3–5 MB</span>
+            <Icon name="tabler:cpu" class="w-4 h-4 text-primary shrink-0" />
+            <span class="font-mono text-xs sm:text-sm font-semibold text-title truncate">RAM: ~3–5 MB</span>
           </div>
-          <p class="mt-1 text-[11px] sm:text-xs text-dim">Idle RSS memory</p>
+          <p class="mt-1 text-[11px] sm:text-xs text-dim">Idle resident memory (RSS)</p>
         </div>
 
         <div class="text-left">

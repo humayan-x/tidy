@@ -3,23 +3,23 @@
 <p align="center">
   <a href="https://github.com/humayan-x/tidy/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen?style=flat-square&logo=githubactions" alt="CI Build Status" /></a>
   <a href="https://www.npmjs.com/package/@humayan-x/tidy"><img src="https://img.shields.io/npm/v/@humayan-x/tidy?style=flat-square&logo=npm&color=CB3837" alt="npm version" /></a>
-  <a href="https://github.com/humayan-x/tidy/releases"><img src="https://img.shields.io/badge/version-0.2.0-blue?style=flat-square" alt="Version 0.2.0" /></a>
+  <a href="https://github.com/humayan-x/tidy/releases"><img src="https://img.shields.io/badge/version-0.2.1-blue?style=flat-square" alt="Version 0.2.1" /></a>
   <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue?style=flat-square" alt="License" /></a>
   <a href="https://www.rust-lang.org"><img src="https://img.shields.io/badge/rust-1.75%2B%20(2021)-orange?style=flat-square&logo=rust" alt="Rust 1.75+" /></a>
   <img src="https://img.shields.io/badge/platform-linux%20%7C%20macos-lightgrey?style=flat-square" alt="Platform" />
   <img src="https://img.shields.io/badge/memory-~3--5%20MB%20RSS-success?style=flat-square" alt="Memory RSS" />
 </p>
 
-> **A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.**
+> **A blazing-fast, local-first file organizer and watcher in Rust with zero runtime dependencies for Linux and macOS.**
 
-`tidy` automatically scans and organizes cluttered directories (like your `Downloads` folder) into clean, predictable category hierarchies and extension subfolders (e.g. `Documents/PDF`, `Documents/XLSX`, `Images/PNG`, `Images/JPG`). It provides guaranteed non-destructive file operations, persistent undo rollbacks via an embedded SQLite transaction ledger, real-time filesystem event watching, and background service integration (`systemd --user` on Linux and `launchd` on macOS).
+`tidy` automatically scans and organizes cluttered directories (like your `Downloads` folder) into clean, predictable category hierarchies and extension subfolders (e.g. `Documents/PDFs`, `Documents/Word`, `Documents/Excel`, `Images/PNG`, `Images/JPG`). It provides guaranteed non-destructive file operations, persistent undo rollbacks via an embedded SQLite transaction ledger, real-time filesystem event watching, and background service integration (`systemd --user` on Linux and `launchd` on macOS).
 
 ---
 
 ## Key Highlights
 
-- ⚡ **Blazing Fast**: Native compiled Rust with link-time optimization (LTO) producing a single `< 5 MB` static binary.
-- 🌳 **Hierarchical Tree Organization**: Groups files cleanly by category and extension subfolders (`Documents/PDF/`, `Images/PNG/`, `Archives/ZIP/`, `Code/PY/`).
+- ⚡ **Blazing Fast**: Native compiled Rust with link-time optimization (LTO) producing a single `< 5 MB` static binary with zero runtime dependencies.
+- 🌳 **Hierarchical Tree Organization**: Groups files cleanly by category and readable extension subfolders (`Documents/PDFs/`, `Documents/Word/`, `Documents/Excel/`, `Images/PNG/`, `Archives/ZIP/`, `Code/PY/`).
 - 🔒 **Zero-Risk Non-Destructive Safety**:
   - **Predictable Collision Renaming**: Never overwrites existing files — appends standard incremental counters (`photo (1).jpg`, `archive (1).tar.gz`).
   - **Atomic Cross-Device Fallback**: Catches `EXDEV` across partition boundaries and executes staged atomic copy-and-verify before removing sources.
@@ -84,12 +84,27 @@
 
 ## Installation
 
-### Pre-built Script (Direct CLI Download)
+### 1. Standalone Binary (Recommended)
+Installs the pre-compiled native static binary for Linux (x86_64 / aarch64) or macOS (Apple Silicon / Intel):
 ```bash
 curl -fsSL https://raw.githubusercontent.com/humayan-x/tidy/main/install.sh | sh
 ```
 
-### Via npm or npx
+### 2. Package Managers
+
+#### macOS (Homebrew)
+```bash
+brew install humayan-x/tap/tidy
+```
+
+#### Arch Linux (AUR)
+```bash
+yay -S tidy-bin
+```
+
+### 3. Via npm or npx (Downloader Wrapper)
+> *Note: This npm package is a postinstall downloader wrapper that fetches the official native Rust binary for your platform. It contains no JavaScript runtime overhead.*
+
 Run instantly without installation via `npx`:
 ```bash
 # Preview organization on Downloads
@@ -102,7 +117,6 @@ npx @humayan-x/tidy run
 Or install globally:
 ```bash
 npm install -g @humayan-x/tidy
-tidy run
 ```
 
 > **Note for npm 10.9+ / Node 22+**:
@@ -111,19 +125,12 @@ tidy run
 > npm install -g --allow-scripts=@humayan-x/tidy @humayan-x/tidy
 > ```
 
-### From Source (Cargo)
+### 4. From Source (Cargo)
 Ensure you have Rust (2021 edition, 1.75+) installed:
 
 ```bash
 git clone https://github.com/humayan-x/tidy.git
 cd tidy
-cargo build --release
-```
-
-The optimized release binary is located at `target/release/tidy`.
-
-To install it directly into your `~/.cargo/bin`:
-```bash
 cargo install --path .
 ```
 
@@ -132,7 +139,7 @@ cargo install --path .
 ## CLI Usage Reference
 
 ```text
-tidy [OPTIONS] <COMMAND>
+Usage: tidy [OPTIONS] <COMMAND>
 ```
 
 ### Command Overview
@@ -141,11 +148,12 @@ tidy [OPTIONS] <COMMAND>
 |---|---|
 | [`tidy run`](#1-single-pass-organize-tidy-run) | Executes a single-pass scan and file organize cycle. |
 | [`tidy watch`](#2-real-time-watcher-tidy-watch) | Starts the long-running resident daemon watching a directory. |
-| [`tidy undo`](#3-persistent-undo-tidy-undo) | Rolls back operation batches using the local SQLite ledger. |
-| [`tidy status`](#4-status-reporting-tidy-status) | Reports watched directories, rule summaries, database size, and daemon status. |
-| [`tidy service`](#5-background-service-management-tidy-service) | Manages user-level OS background services (`systemd --user` or `launchd`). |
-| [`tidy init`](#6-configuration-scaffolding-tidy-init) | Scaffolds a default, fully commented `config.toml` file. |
-| [`tidy completions`](#7-shell-auto-completions-tidy-completions) | Generates shell completion scripts for `bash`, `zsh`, or `fish`. |
+| [`tidy undo`](#3-persistent-undo-tidy-undo) | Rolls back operation batches in LIFO order using the local SQLite ledger. |
+| [`tidy history`](#4-transaction-history--pruning-tidy-history) | Inspects ledger statistics and reclaims database disk space. |
+| [`tidy status`](#5-status-reporting-tidy-status) | Reports watched directories, rule summaries, database size, and daemon status. |
+| [`tidy service`](#6-background-service-management-tidy-service) | Manages user-level OS background services (`systemd --user` or `launchd`). |
+| [`tidy init`](#7-configuration-scaffolding-tidy-init) | Scaffolds a default, fully commented `config.toml` file. |
+| [`tidy completions`](#8-shell-auto-completions-tidy-completions) | Generates shell completion scripts for `bash`, `zsh`, or `fish`. |
 
 ---
 
@@ -159,6 +167,16 @@ tidy run
 Organize your `Downloads` directory with dry-run preview (no files moved):
 ```bash
 tidy run --path ~/Downloads --dry-run
+```
+
+Organize directly into top-level category folders without extension subfolders (Flat mode):
+```bash
+tidy run --flat
+```
+
+Exclude specific directories or file patterns:
+```bash
+tidy run --exclude 'work/**' --exclude 'drafts/**' --exclude '*.tmp'
 ```
 
 Organize subdirectories recursively into category folders:
@@ -180,6 +198,11 @@ Watch your `Downloads` folder for newly added files:
 tidy watch
 ```
 
+Watch in flat mode with path exclusions and a 5-second grace period for actively edited files:
+```bash
+tidy watch --flat --exclude 'work/**' --grace-period 5
+```
+
 Watch a custom directory recursively and organize existing files first:
 ```bash
 tidy watch --path ~/Downloads --recursive --initial-scan
@@ -194,6 +217,8 @@ tidy watch --debounce 3000
 
 ### 3. Persistent Undo (`tidy undo`)
 
+`tidy` records every file operation atomically into an embedded SQLite WAL ledger (`history.db`). Undoing operations follows a strict **LIFO (Last-In, First-Out)** transaction contract to guarantee filesystem consistency.
+
 Undo the most recent operation batch:
 ```bash
 tidy undo
@@ -204,7 +229,7 @@ Preview an undo rollback without modifying files on disk (`--dry-run`):
 tidy undo --dry-run
 ```
 
-Sequentially undo the last 3 runs:
+Sequentially undo the last 3 runs (in reverse chronological order):
 ```bash
 tidy undo --last 3
 ```
@@ -219,7 +244,25 @@ Roll back all recorded runs in history:
 tidy undo --all
 ```
 
-> **Note**: If an empty category directory is left behind after an undo operation, `tidy` cleanly prunes it.
+> **Safety Contract**:
+> - If an empty category directory is left behind after undoing, `tidy` cleanly prunes it.
+> - If destination files were deleted or moved by the user, `tidy undo` reports them as `SkippedMissing` and continues rolling back the remaining files without error or data loss.
+> - If the source parent directory was deleted, `tidy undo` automatically recreates it recursively before restoring the file.
+
+---
+
+### 4. Transaction History & Pruning (`tidy history`)
+
+Inspect ledger statistics including database size, completed runs, and recorded operations:
+```bash
+tidy history info
+```
+
+Prune old runs and operations to reclaim disk space (executes SQLite `VACUUM`):
+```bash
+# Delete history records older than 30 days
+tidy history prune --days 30
+```
 
 ---
 
@@ -350,7 +393,7 @@ stability_tick_ms = 500
 # Whether to scan or watch subdirectories recursively
 recursive = false
 
-# Whether to organize files into extension-based subfolders (e.g. Documents/PDF, Images/PNG)
+# Whether to organize files into extension-based subfolders (e.g. Documents/PDFs, Documents/Word)
 nest_by_extension = true
 
 # Glob patterns to ignore
@@ -372,6 +415,12 @@ ignore_patterns = [
 Images = "Photos"
 Documents = "Docs"
 
+# Custom subfolder names for nested extension folders (optional)
+# Overrides or adds to defaults (.pdf -> PDFs, .doc/.docx -> Word, .xls/.xlsx/.ods -> Excel, .ppt/.pptx -> PowerPoint)
+[subfolders]
+odt = "Word"
+rtf = "Word"
+
 # User-defined custom categories
 [categories]
 3D = ["obj", "stl", "blend", "fbx"]
@@ -387,6 +436,30 @@ Data = ["csv", "tsv", "parquet", "jsonl"]
 |---|---|---|---|
 | **Linux** | `~/.config/tidy/config.toml` | `~/.local/state/tidy/history.db` | `journalctl --user -u tidy.service` |
 | **macOS** | `~/Library/Application Support/tidy/config.toml` | `~/Library/Application Support/tidy/history.db` | `~/Library/Logs/tidy/tidy.log` |
+
+---
+
+## Architecture & Adoption FAQ
+
+### What happens on undo if the destination directory or file was deleted?
+If you manually delete or relocate files after they were organized, `tidy undo` detects their absence and marks them as `SkippedMissing`. It safely continues rolling back all remaining files in the run without throwing errors or corrupting the ledger. If the *source* directory where files are being restored to was deleted, `tidy` automatically recreates the directory tree recursively before moving each file back.
+
+### How does the watcher behave on network filesystems (SMB, NFS, sshfs)?
+`tidy watch` monitors filesystem events via OS kernel hooks (`inotify` on Linux and `FSEvents` on macOS). Remote network protocols (CIFS/SMB, NFS, sshfs) do not broadcast server-side modifications down to the client OS kernel. Therefore, background watching on remote mounts will not detect changes made by other network clients. For network shares, we recommend running scheduled batch scans via cron or a systemd timer (e.g. `tidy run --path /mnt/nas`) instead of running a resident watch daemon.
+
+### How do I prevent tidy from touching specific folders or working trees?
+You can exclude entire directories and subtrees using the `--exclude` flag or the `exclude` setting in `config.toml`:
+```bash
+tidy run --exclude 'work/**' --exclude 'drafts/**'
+```
+Glob patterns match against both the bare filename and the relative path from the target root directory.
+
+### What is the retention policy on `history.db`? Does it grow unbounded?
+The local transaction database is stored in SQLite with Write-Ahead Logging (`WAL`). Each recorded file operation requires roughly 50 bytes of storage (~1 KB per 20 operations). For high-volume automated setups, you can monitor database size with `tidy history info` and purge runs older than a specific threshold with:
+```bash
+tidy history prune --days 30
+```
+This purges expired records and automatically executes SQLite `VACUUM` to reclaim disk pages.
 
 ---
 

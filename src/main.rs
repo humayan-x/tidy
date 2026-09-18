@@ -23,6 +23,7 @@ fn main() {
         Commands::Run(args) => cli::run::execute_run(args, cli.config.as_deref()),
         Commands::Watch(args) => cli::watch::execute_watch(args, cli.config.as_deref()),
         Commands::Undo(args) => cli::undo::execute_undo_cmd(args),
+        Commands::History(args) => cli::history_cmd::execute_history_cmd(args),
         Commands::Status => cli::status::execute_status_cmd(cli.config.as_deref()),
         Commands::Service(args) => tidy::service::execute_service(args, cli.config.as_deref()),
         Commands::Init(args) => cli::config_cmd::execute_init(args.path.as_deref(), args.force),

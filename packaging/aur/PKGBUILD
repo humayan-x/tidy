@@ -1,8 +1,8 @@
 # Maintainer: tidy contributors <contributors@tidy.org>
 pkgname=tidy-bin
-pkgver=0.2.0
+pkgver=0.2.1
 pkgrel=1
-pkgdesc="A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust"
+pkgdesc="A blazing-fast, local-first file organizer and watcher in Rust with zero runtime dependencies"
 arch=('x86_64')
 url="https://github.com/humayan-x/tidy"
 license=('MIT' 'Apache-2.0')

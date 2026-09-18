@@ -153,7 +153,7 @@ fn test_watch_collision_renaming() {
     let doc1 = root.join("report.pdf");
     File::create(&doc1).unwrap().write_all(b"doc v1").unwrap();
 
-    let dest1 = root.join("Documents").join("PDF").join("report.pdf");
+    let dest1 = root.join("Documents").join("PDFs").join("report.pdf");
     assert!(
         wait_for_path(&dest1, Duration::from_secs(5)),
         "First report.pdf should be organized"
@@ -163,7 +163,7 @@ fn test_watch_collision_renaming() {
     let doc2 = root.join("report.pdf");
     File::create(&doc2).unwrap().write_all(b"doc v2").unwrap();
 
-    let dest2 = root.join("Documents").join("PDF").join("report (1).pdf");
+    let dest2 = root.join("Documents").join("PDFs").join("report (1).pdf");
     assert!(
         wait_for_path(&dest2, Duration::from_secs(5)),
         "Collision should rename to report (1).pdf"
@@ -255,7 +255,10 @@ fn test_watch_initial_scan() {
     let _watch_args = tidy::cli::WatchArgs {
         path: Some(root.clone()),
         recursive: false,
+        flat: false,
+        exclude: Vec::new(),
         debounce: Some(100),
+        grace_period: None,
         initial_scan: true,
     };
 
@@ -268,7 +271,7 @@ fn test_watch_initial_scan() {
     assert_eq!(planned[0].category, "Documents");
     assert_eq!(
         planned[0].proposed_dest,
-        root.join("Documents").join("PDF").join("pre_existing.pdf")
+        root.join("Documents").join("PDFs").join("pre_existing.pdf")
     );
 
     let dest = planned[0].proposed_dest.clone();

@@ -82,6 +82,28 @@ pub fn default_categories() -> BTreeMap<String, Vec<String>> {
     categories
 }
 
+/// Returns the default human-readable folder name mapping for file extensions.
+///
+/// Groups related extensions into clean, readable directory names:
+/// - `.pdf` -> `PDFs`
+/// - `.doc`, `.docx` -> `Word`
+/// - `.xls`, `.xlsx`, `.ods` -> `Excel`
+/// - `.ppt`, `.pptx` -> `PowerPoint`
+///
+/// Extensions not present in this map fall back to their normalized uppercase extension.
+pub fn default_extension_subfolders() -> BTreeMap<String, String> {
+    let mut map = BTreeMap::new();
+    map.insert("pdf".to_string(), "PDFs".to_string());
+    map.insert("doc".to_string(), "Word".to_string());
+    map.insert("docx".to_string(), "Word".to_string());
+    map.insert("xls".to_string(), "Excel".to_string());
+    map.insert("xlsx".to_string(), "Excel".to_string());
+    map.insert("ods".to_string(), "Excel".to_string());
+    map.insert("ppt".to_string(), "PowerPoint".to_string());
+    map.insert("pptx".to_string(), "PowerPoint".to_string());
+    map
+}
+
 /// Returns the standard list of glob patterns to ignore.
 ///
 /// Filters active browser downloads, partial files, OS indexing files, and editor swap files.
@@ -165,5 +187,24 @@ mod tests {
         assert!(patterns.contains(&"*.part".to_string()));
         assert!(patterns.contains(&"*.tmp".to_string()));
         assert!(patterns.contains(&".DS_Store".to_string()));
+    }
+
+    #[test]
+    fn test_default_extension_subfolders() {
+        let subfolders = default_extension_subfolders();
+        assert_eq!(subfolders.get("pdf"), Some(&"PDFs".to_string()));
+        assert_eq!(subfolders.get("doc"), Some(&"Word".to_string()));
+        assert_eq!(subfolders.get("docx"), Some(&"Word".to_string()));
+        assert_eq!(subfolders.get("xls"), Some(&"Excel".to_string()));
+        assert_eq!(subfolders.get("xlsx"), Some(&"Excel".to_string()));
+        assert_eq!(subfolders.get("ods"), Some(&"Excel".to_string()));
+        assert_eq!(subfolders.get("ppt"), Some(&"PowerPoint".to_string()));
+        assert_eq!(subfolders.get("pptx"), Some(&"PowerPoint".to_string()));
+
+        // Ensure other extensions are unmapped so they fall back to uppercase
+        assert_eq!(subfolders.get("odt"), None);
+        assert_eq!(subfolders.get("txt"), None);
+        assert_eq!(subfolders.get("epub"), None);
+        assert_eq!(subfolders.get("png"), None);
     }
 }

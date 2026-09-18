@@ -71,9 +71,21 @@ pub fn execute_watch(args: &WatchArgs, custom_config: Option<&Path>) -> Result<(
             path: Some(target_dir.clone()),
             dry_run: false,
             recursive: args.recursive,
+            flat: args.flat,
+            exclude: args.exclude.clone(),
         };
         crate::cli::run::execute_run(&run_args, custom_config)?;
     }
+
+    // Apply CLI overrides to config
+    let mut config = config;
+    if args.flat {
+        config.settings.nest_by_extension = false;
+    }
+    if let Some(gp) = args.grace_period {
+        config.settings.grace_period_secs = gp;
+    }
+    config.settings.exclude.extend(args.exclude.clone());
 
     // 5. Register graceful termination signal handler (SIGINT / SIGTERM / SIGHUP)
     let shutdown_signal = Arc::new(AtomicBool::new(false));
@@ -86,7 +98,7 @@ pub fn execute_watch(args: &WatchArgs, custom_config: Option<&Path>) -> Result<(
         tracing::debug!("Signal handler notice: {}", e);
     }
 
-    // 5. Initialize and run dispatcher
+    // 6. Initialize and run dispatcher
     let mut dispatcher = WatchDispatcher::new(watch_config, &config)?;
     dispatcher.run(shutdown_signal)?;
 

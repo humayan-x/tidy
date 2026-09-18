@@ -31,12 +31,22 @@ fn test_single_run_organization() {
     // Create candidate files in root
     let f_img = root.join("photo.jpg");
     let f_doc = root.join("contract.pdf");
+    let f_docx = root.join("letter.docx");
+    let f_xlsx = root.join("budget.xlsx");
+    let f_ods = root.join("calc.ods");
+    let f_pptx = root.join("pitch.pptx");
+    let f_odt = root.join("report.odt");
     let f_aud = root.join("song.mp3");
     let f_arc = root.join("archive.tar.gz");
     let f_code = root.join("script.py");
 
     File::create(&f_img).unwrap().write_all(b"image").unwrap();
     File::create(&f_doc).unwrap().write_all(b"doc").unwrap();
+    File::create(&f_docx).unwrap().write_all(b"word").unwrap();
+    File::create(&f_xlsx).unwrap().write_all(b"excel").unwrap();
+    File::create(&f_ods).unwrap().write_all(b"ods").unwrap();
+    File::create(&f_pptx).unwrap().write_all(b"ppt").unwrap();
+    File::create(&f_odt).unwrap().write_all(b"odt").unwrap();
     File::create(&f_aud).unwrap().write_all(b"audio").unwrap();
     File::create(&f_arc).unwrap().write_all(b"archive").unwrap();
     File::create(&f_code).unwrap().write_all(b"code").unwrap();
@@ -45,6 +55,8 @@ fn test_single_run_organization() {
         path: Some(root.to_path_buf()),
         dry_run: false,
         recursive: false,
+        flat: false,
+        exclude: Vec::new(),
     };
 
     execute_run(&args, None).unwrap();
@@ -52,6 +64,11 @@ fn test_single_run_organization() {
     // Verify original files are gone
     assert!(!f_img.exists());
     assert!(!f_doc.exists());
+    assert!(!f_docx.exists());
+    assert!(!f_xlsx.exists());
+    assert!(!f_ods.exists());
+    assert!(!f_pptx.exists());
+    assert!(!f_odt.exists());
     assert!(!f_aud.exists());
     assert!(!f_arc.exists());
     assert!(!f_code.exists());
@@ -60,8 +77,33 @@ fn test_single_run_organization() {
     assert!(root.join("Images").join("JPG").join("photo.jpg").exists());
     assert!(root
         .join("Documents")
-        .join("PDF")
+        .join("PDFs")
         .join("contract.pdf")
+        .exists());
+    assert!(root
+        .join("Documents")
+        .join("Word")
+        .join("letter.docx")
+        .exists());
+    assert!(root
+        .join("Documents")
+        .join("Excel")
+        .join("budget.xlsx")
+        .exists());
+    assert!(root
+        .join("Documents")
+        .join("Excel")
+        .join("calc.ods")
+        .exists());
+    assert!(root
+        .join("Documents")
+        .join("PowerPoint")
+        .join("pitch.pptx")
+        .exists());
+    assert!(root
+        .join("Documents")
+        .join("ODT")
+        .join("report.odt")
         .exists());
     assert!(root.join("Audio").join("MP3").join("song.mp3").exists());
     assert!(root
@@ -86,6 +128,8 @@ fn test_dry_run_no_side_effects() {
         path: Some(root.to_path_buf()),
         dry_run: true,
         recursive: false,
+        flat: false,
+        exclude: Vec::new(),
     };
 
     execute_run(&args, None).unwrap();
@@ -304,3 +348,65 @@ fn test_undo_dry_run_and_all() {
     let none = ledger.get_latest_completed_run().unwrap();
     assert!(none.is_none());
 }
+
+#[test]
+fn test_flat_mode_organization() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path();
+    std::env::set_var("TIDY_STATE_DIR", root);
+
+    let f_pdf = root.join("invoice.pdf");
+    File::create(&f_pdf).unwrap().write_all(b"%PDF-1.4").unwrap();
+
+    let args = RunArgs {
+        path: Some(root.to_path_buf()),
+        dry_run: false,
+        recursive: false,
+        flat: true,
+        exclude: Vec::new(),
+    };
+
+    execute_run(&args, None).unwrap();
+
+    // In flat mode, files go directly into Documents/invoice.pdf (not Documents/PDFs/invoice.pdf)
+    assert!(root.join("Documents").join("invoice.pdf").exists());
+    assert!(!root.join("Documents").join("PDFs").join("invoice.pdf").exists());
+}
+
+#[test]
+fn test_exclude_flag_organization() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path();
+    std::env::set_var("TIDY_STATE_DIR", root);
+
+    let f_pdf = root.join("invoice.pdf");
+    let f_keep = root.join("keep.pdf");
+    File::create(&f_pdf).unwrap().write_all(b"%PDF-1.4").unwrap();
+    File::create(&f_keep).unwrap().write_all(b"%PDF-1.4").unwrap();
+
+    let args = RunArgs {
+        path: Some(root.to_path_buf()),
+        dry_run: false,
+        recursive: false,
+        flat: false,
+        exclude: vec!["keep.*".into()],
+    };
+
+    execute_run(&args, None).unwrap();
+
+    // invoice.pdf moved, keep.pdf stayed in root
+    assert!(root.join("Documents").join("PDFs").join("invoice.pdf").exists());
+    assert!(f_keep.exists());
+}
+
+#[test]
+fn test_bin_name_usage_help() {
+    use clap::CommandFactory;
+    use tidy::cli::Cli;
+
+    let mut cmd = Cli::command();
+    let help_text = cmd.render_help().to_string();
+    assert!(help_text.contains("Usage: tidy [OPTIONS] <COMMAND>"));
+    assert!(!help_text.contains("Usage: tidy-bin"));
+}
+

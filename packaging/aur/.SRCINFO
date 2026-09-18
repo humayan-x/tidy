@@ -1,6 +1,6 @@
 pkgbase = tidy-bin
-	pkgdesc = A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust
-	pkgver = 0.2.0
+	pkgdesc = A blazing-fast, local-first file organizer and watcher in Rust with zero runtime dependencies
+	pkgver = 0.2.1
 	pkgrel = 1
 	url = https://github.com/humayan-x/tidy
 	arch = x86_64

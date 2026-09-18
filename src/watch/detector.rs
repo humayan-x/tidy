@@ -25,24 +25,33 @@ pub struct PendingFileTracker {
     pending: HashMap<PathBuf, PendingFile>,
     required_stable_ticks: u32,
     max_tracking_duration: Duration,
+    grace_period: Duration,
 }
 
 impl PendingFileTracker {
-    /// Creates a new tracker with specified stability criteria.
-    ///
-    /// * `required_stable_ticks`: Number of consecutive ticks file size & mtime must remain unchanged.
+    /// Creates a new tracker with specified stability criteria and zero grace period.
     pub fn new(required_stable_ticks: u32, max_tracking_duration: Duration) -> Self {
+        Self::new_with_grace_period(required_stable_ticks, max_tracking_duration, Duration::from_secs(0))
+    }
+
+    /// Creates a new tracker with specified stability criteria and grace period.
+    pub fn new_with_grace_period(
+        required_stable_ticks: u32,
+        max_tracking_duration: Duration,
+        grace_period: Duration,
+    ) -> Self {
         Self {
             pending: HashMap::new(),
             required_stable_ticks,
             max_tracking_duration,
+            grace_period,
         }
     }
 
     /// Default configuration: 2 stable checks and 10 minutes maximum tracking window.
     #[allow(dead_code)]
     pub fn default_config() -> Self {
-        Self::new(2, Duration::from_secs(600))
+        Self::new_with_grace_period(2, Duration::from_secs(600), Duration::from_secs(3))
     }
 
     /// Registers a newly discovered or modified file path.
@@ -111,6 +120,15 @@ impl PendingFileTracker {
             // it stable, to allow applications or downloads time to write their initial chunks.
             if current_size == 0 && entry.first_seen.elapsed() < Duration::from_millis(1500) {
                 continue;
+            }
+
+            // Grace period guard: if file was touched recently, wait until grace period has elapsed
+            if let Some(mtime) = current_mtime {
+                if let Ok(elapsed) = mtime.elapsed() {
+                    if elapsed < self.grace_period {
+                        continue;
+                    }
+                }
             }
 
             // Size and mtime are identical to last tick. Verify file access readiness.

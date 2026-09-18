@@ -1,4 +1,4 @@
-//! Native, zero-dependency shell completion generator for Bash, Zsh, and Fish.
+//! Native shell completion generator with zero runtime dependencies for Bash, Zsh, and Fish.
 
 use crate::common::error::Result;
 use clap::ValueEnum;

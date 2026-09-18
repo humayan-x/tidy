@@ -8,6 +8,17 @@ use crate::common::error::Result;
 use crate::common::paths::{ensure_parent_dir, get_history_db_path};
 use crate::safety::mover::MoveOutcome;
 
+/// Aggregated statistics of the transaction ledger.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct HistoryStats {
+    pub total_runs: usize,
+    pub completed_runs: usize,
+    pub reverted_runs: usize,
+    pub total_operations: usize,
+    pub oldest_run: Option<String>,
+    pub newest_run: Option<String>,
+}
+
 /// Record representing an entire execution batch (`tidy run` or daemon cycle).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RunRecord {
@@ -292,6 +303,61 @@ impl Ledger {
 
         Ok(runs)
     }
+
+    /// Returns aggregated ledger statistics.
+    pub fn get_history_stats(&self) -> Result<HistoryStats> {
+        let total_runs: usize = self
+            .conn
+            .query_row("SELECT COUNT(*) FROM runs", [], |r| r.get(0))?;
+        let completed_runs: usize = self.conn.query_row(
+            "SELECT COUNT(*) FROM runs WHERE status = 'COMPLETED'",
+            [],
+            |r| r.get(0),
+        )?;
+        let reverted_runs: usize = self.conn.query_row(
+            "SELECT COUNT(*) FROM runs WHERE status = 'REVERTED'",
+            [],
+            |r| r.get(0),
+        )?;
+        let total_operations: usize = self
+            .conn
+            .query_row("SELECT COUNT(*) FROM operations", [], |r| r.get(0))?;
+        let oldest_run: Option<String> = self
+            .conn
+            .query_row("SELECT MIN(timestamp) FROM runs", [], |r| r.get(0))
+            .ok()
+            .flatten();
+        let newest_run: Option<String> = self
+            .conn
+            .query_row("SELECT MAX(timestamp) FROM runs", [], |r| r.get(0))
+            .ok()
+            .flatten();
+
+        Ok(HistoryStats {
+            total_runs,
+            completed_runs,
+            reverted_runs,
+            total_operations,
+            oldest_run,
+            newest_run,
+        })
+    }
+
+    /// Prunes runs older than `days` days, cascading to operations and running VACUUM.
+    /// Returns the number of pruned runs.
+    pub fn prune_older_than(&mut self, days: u32) -> Result<usize> {
+        let cutoff = (Utc::now() - chrono::Duration::days(days as i64)).to_rfc3339();
+        let deleted = self.conn.execute(
+            "DELETE FROM runs WHERE timestamp < ?1",
+            params![cutoff],
+        )?;
+
+        if deleted > 0 {
+            self.conn.execute("VACUUM", [])?;
+        }
+
+        Ok(deleted)
+    }
 }
 
 #[cfg(test)]
@@ -342,5 +408,46 @@ mod tests {
         ledger.mark_run_status(run.id, "REVERTED").unwrap();
         let after = ledger.get_latest_completed_run().unwrap();
         assert!(after.is_none());
+    }
+
+    #[test]
+    fn test_ledger_stats_and_prune() {
+        let temp = tempfile::tempdir().unwrap();
+        let db_path = temp.path().join("test_stats.db");
+
+        let mut ledger = Ledger::open_at(&db_path).unwrap();
+
+        let moves = vec![MoveOutcome {
+            source: PathBuf::from("/downloads/photo.jpg"),
+            destination: PathBuf::from("/downloads/Images/photo.jpg"),
+            file_size: 1024,
+            was_collision: false,
+            is_cross_device: false,
+            is_symlink: false,
+        }];
+
+        ledger
+            .record_run("tidy run", Path::new("/downloads"), &moves)
+            .unwrap();
+
+        let stats = ledger.get_history_stats().unwrap();
+        assert_eq!(stats.total_runs, 1);
+        assert_eq!(stats.completed_runs, 1);
+        assert_eq!(stats.total_operations, 1);
+        assert!(stats.oldest_run.is_some());
+
+        // Prune older than 0 days (i.e. older than right now + 1 second buffer)
+        // Set timestamp back in sqlite to test prune
+        ledger
+            .conn
+            .execute("UPDATE runs SET timestamp = '2020-01-01T00:00:00Z'", [])
+            .unwrap();
+
+        let pruned = ledger.prune_older_than(30).unwrap();
+        assert_eq!(pruned, 1);
+
+        let after_stats = ledger.get_history_stats().unwrap();
+        assert_eq!(after_stats.total_runs, 0);
+        assert_eq!(after_stats.total_operations, 0);
     }
 }

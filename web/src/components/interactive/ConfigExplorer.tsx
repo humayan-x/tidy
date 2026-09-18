@@ -58,7 +58,7 @@ stability_tick_ms = 500
 # Whether to scan or watch subdirectories recursively
 recursive = false
 
-# Whether to organize files into extension-based subfolders (e.g. Documents/PDF, Images/PNG)
+# Whether to organize files into extension-based subfolders (e.g. Documents/PDFs, Documents/Word)
 nest_by_extension = true
 
 # Download and temporary file guard patterns to ignore during watch/run

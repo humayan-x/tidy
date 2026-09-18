@@ -1,8 +1,8 @@
 [package]
 name = "tidy"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
-description = "A blazing-fast, zero-dependency, local-first file organizer and watcher for Linux and macOS."
+description = "A blazing-fast, local-first file organizer and watcher in Rust with zero runtime dependencies for Linux and macOS."
 authors = ["tidy contributors"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/humayan-x/tidy"
