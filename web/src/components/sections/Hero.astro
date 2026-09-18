@@ -1,0 +1,106 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<section class="relative border-b border-zinc-800 bg-zinc-950 py-16 sm:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col items-center text-center">
+      
+      <!-- Top Release Pill -->
+      <div class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/90 px-3.5 py-1 text-xs font-mono text-zinc-300">
+        <span class="flex h-2 w-2 rounded-full bg-cyan-400"></span>
+        <span class="text-zinc-400">tidy v0.2.0</span>
+        <span class="text-zinc-600">/</span>
+        <span class="text-zinc-300">Rust 1.75+</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="mt-6 max-w-4xl text-3xl font-bold tracking-tight text-zinc-100 sm:text-5xl lg:text-6xl">
+        Fast, non-destructive file organizer & watcher in Rust
+      </h1>
+
+      <!-- Concise Subtitle -->
+      <p class="mt-4 max-w-2xl text-base text-zinc-400 sm:text-lg">
+        Organize cluttered folders into clean directory trees with collision safety and instant SQLite rollback.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a
+          href="https://github.com/humayan-x/tidy"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded border border-zinc-700 bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-850 hover:text-zinc-100"
+        >
+          <Icon name="tabler:brand-github" class="w-4 h-4 text-zinc-400" />
+          <span>Star on GitHub</span>
+        </a>
+
+        <a
+          href="#install"
+          class="inline-flex items-center gap-2 rounded border border-zinc-800 bg-zinc-900 px-5 py-2.5 text-sm font-mono text-zinc-400 transition-colors hover:border-zinc-700 hover:text-zinc-200"
+        >
+          <Icon name="tabler:terminal-2" class="w-4 h-4 text-cyan-400" />
+          <span>Install CLI</span>
+        </a>
+      </div>
+
+      <!-- Quick Command Bar: Wide container, guaranteed single-line display -->
+      <div class="mt-8 w-full max-w-2xl sm:max-w-3xl">
+        <div class="flex items-center justify-between gap-4 rounded border border-zinc-800 bg-zinc-900/90 px-4 py-3 font-mono text-xs sm:text-sm text-zinc-300 shadow-inner">
+          <div class="flex items-center gap-3 overflow-x-auto py-0.5 text-left">
+            <span class="text-cyan-400 select-none">$</span>
+            <span class="text-zinc-200 select-all whitespace-nowrap">
+              npx @humayan-x/tidy run --path ~/Downloads --dry-run
+            </span>
+          </div>
+          <button
+            id="copy-hero-btn"
+            class="flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-800 px-2.5 py-1 text-xs text-zinc-300 transition-colors hover:bg-zinc-750 hover:text-zinc-100 shrink-0 select-none"
+            title="Copy command"
+            onclick="navigator.clipboard.writeText('npx @humayan-x/tidy run --path ~/Downloads --dry-run'); this.querySelector('.copy-txt').textContent = 'Copied'; setTimeout(() => this.querySelector('.copy-txt').textContent = 'Copy', 2000);"
+          >
+            <Icon name="tabler:copy" class="w-3.5 h-3.5 text-zinc-400" />
+            <span class="copy-txt">Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Architectural Spec Badges -->
+      <div class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 w-full max-w-4xl">
+        <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3.5 text-left">
+          <div class="flex items-center gap-2 text-zinc-400">
+            <Icon name="tabler:cpu" class="w-4 h-4 text-zinc-400" />
+            <span class="font-mono text-xs font-semibold text-zinc-200">&lt; 5 MB</span>
+          </div>
+          <p class="mt-1 text-[11px] text-zinc-500">Static binary</p>
+        </div>
+
+        <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3.5 text-left">
+          <div class="flex items-center gap-2 text-zinc-400">
+            <Icon name="tabler:bolt" class="w-4 h-4 text-cyan-400" />
+            <span class="font-mono text-xs font-semibold text-zinc-200">~3–5 MB</span>
+          </div>
+          <p class="mt-1 text-[11px] text-zinc-500">Idle RSS memory</p>
+        </div>
+
+        <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3.5 text-left">
+          <div class="flex items-center gap-2 text-zinc-400">
+            <Icon name="tabler:history" class="w-4 h-4 text-zinc-400" />
+            <span class="font-mono text-xs font-semibold text-zinc-200">SQLite Ledger</span>
+          </div>
+          <p class="mt-1 text-[11px] text-zinc-500">Instant batch undo</p>
+        </div>
+
+        <div class="rounded border border-zinc-800 bg-zinc-900/60 p-3.5 text-left">
+          <div class="flex items-center gap-2 text-zinc-400">
+            <Icon name="tabler:shield-check" class="w-4 h-4 text-cyan-400" />
+            <span class="font-mono text-xs font-semibold text-zinc-200">Non-Destructive</span>
+          </div>
+          <p class="mt-1 text-[11px] text-zinc-500">Zero overwrites</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

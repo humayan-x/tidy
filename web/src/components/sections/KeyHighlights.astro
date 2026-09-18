@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const HIGHLIGHTS = [
+  {
+    iconName: 'tabler:bolt',
+    title: 'Native Rust Binary',
+    tag: '< 5 MB Static',
+    description: 'Compiled with LTO and zero runtime dependencies for sub-millisecond dispatch.',
+    codeSnippet: 'cargo build --release',
+  },
+  {
+    iconName: 'tabler:shield-check',
+    title: 'Non-Destructive Operations',
+    tag: 'Zero Overwrites',
+    description: 'Automatic incremental collision renaming (e.g. photo (1).jpg) and symlink barriers.',
+    codeSnippet: 'name (1).pdf',
+  },
+  {
+    iconName: 'tabler:history',
+    title: 'Transactional Undo',
+    tag: 'SQLite Ledger',
+    description: 'Every file move is journaled into local history.db for immediate single or batch rollbacks.',
+    codeSnippet: 'tidy undo --last 3',
+  },
+  {
+    iconName: 'tabler:eye',
+    title: '70+ Formats Classifier',
+    tag: 'MIME & Compound',
+    description: 'Native handling for compound archives (.tar.gz) and magic-byte MIME fallback.',
+    codeSnippet: 'compound .tar.gz',
+  },
+  {
+    iconName: 'tabler:cpu',
+    title: 'Adaptive Kernel Watcher',
+    tag: '~3–5 MB RSS',
+    description: 'inotify and FSEvents hooks with download guards that ignore in-progress files.',
+    codeSnippet: 'tidy watch --debounce 2000',
+  },
+  {
+    iconName: 'tabler:server',
+    title: 'Native OS Daemon',
+    tag: 'systemd & launchd',
+    description: 'Manage persistent background watching via systemd --user (Linux) or launchd (macOS).',
+    codeSnippet: 'tidy service enable',
+  },
+];
+---
+
+<section id="features" class="border-b border-zinc-800 bg-zinc-950 py-16 sm:py-20">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-6 border-b border-zinc-855">
+      <div>
+        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-cyan-400">
+          Core Engine
+        </span>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+          Engineered for Safety & Speed
+        </h2>
+      </div>
+      <div class="font-mono text-xs text-zinc-400">
+        Rust 2021 • Zero dependencies • SQLite WAL
+      </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        HIGHLIGHTS.map((item) => (
+          <div class="flex flex-col justify-between rounded border border-zinc-800 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
+            <div>
+              <div class="flex items-center justify-between">
+                <div class="flex h-9 w-9 items-center justify-center rounded border border-zinc-700 bg-zinc-850 text-cyan-400">
+                  <Icon name={item.iconName} class="w-4 h-4 text-cyan-400" />
+                </div>
+                <span class="rounded border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
+                  {item.tag}
+                </span>
+              </div>
+
+              <h3 class="mt-3 font-mono text-sm font-semibold text-zinc-100">
+                {item.title}
+              </h3>
+              <p class="mt-1.5 text-xs text-zinc-400 leading-normal">
+                {item.description}
+              </p>
+            </div>
+
+            <div class="mt-4 border-t border-zinc-850 pt-2.5">
+              <div class="flex items-center justify-between font-mono text-[11px]">
+                <span class="text-zinc-500">CLI:</span>
+                <code class="text-zinc-300 bg-zinc-950 px-1.5 py-0.5 rounded border border-zinc-800">
+                  {item.codeSnippet}
+                </code>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

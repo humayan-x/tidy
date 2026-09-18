@@ -1,0 +1,25 @@
+{
+  "name": "tidy-web",
+  "type": "module",
+  "version": "0.2.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "tsc --noEmit && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/solid-js": "^7.0.2",
+    "@iconify-json/tabler": "^1.2.38",
+    "@tabler/icons": "^3.46.0",
+    "@tabler/icons-solidjs": "^3.46.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "astro-icon": "^1.2.0",
+    "solid-js": "^1.9.15",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2"
+  }
+}

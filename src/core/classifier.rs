@@ -231,7 +231,10 @@ mod tests {
             } => {
                 assert_eq!(category, "Archives");
                 assert_eq!(target_subfolder, "Archives/TAR.GZ");
-                assert_eq!(target_path, Path::new("/downloads/Archives/TAR.GZ/backup.tar.gz"));
+                assert_eq!(
+                    target_path,
+                    Path::new("/downloads/Archives/TAR.GZ/backup.tar.gz")
+                );
                 assert!(is_compound);
             }
             _ => panic!("Expected Move for backup.tar.gz"),

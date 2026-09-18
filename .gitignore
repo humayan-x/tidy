@@ -9,6 +9,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 dist/
+.astro/
 
 # SQLite Ledger & State files
 *.db

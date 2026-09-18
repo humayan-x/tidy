@@ -1,0 +1,28 @@
+---
+import OrganizerSimulator from '../interactive/OrganizerSimulator';
+import { Icon } from 'astro-icon/components';
+---
+
+<section id="demo" class="border-b border-zinc-800 bg-zinc-950 py-16 sm:py-20">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-zinc-850">
+      <div>
+        <div class="inline-flex items-center gap-1.5 font-mono text-xs text-cyan-400">
+          <Icon name="tabler:terminal-2" class="w-3.5 h-3.5 text-cyan-400" />
+          <span>Interactive Sandbox</span>
+        </div>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+          Organization & Rollback Demo
+        </h2>
+      </div>
+      <div class="font-mono text-xs text-zinc-400">
+        Non-destructive collision renaming • SQLite undo journal
+      </div>
+    </div>
+
+    <!-- SolidJS Interactive Client Component -->
+    <div class="mt-8">
+      <OrganizerSimulator client:visible />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import ConfigExplorer from '../interactive/ConfigExplorer';
+import { Icon } from 'astro-icon/components';
+---
+
+<section id="config" class="border-b border-zinc-800 bg-zinc-950 py-16 sm:py-20">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-6 border-b border-zinc-850">
+      <div>
+        <span class="font-mono text-xs font-semibold uppercase tracking-wider text-cyan-400">
+          Rules & TOML
+        </span>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+          Zero-Config Defaults, Fully Extensible
+        </h2>
+      </div>
+      <div class="font-mono text-xs text-zinc-400">
+        Overridable in ~/.config/tidy/config.toml
+      </div>
+    </div>
+
+    <!-- SolidJS Interactive Explorer (Widened) -->
+    <div class="mt-8">
+      <ConfigExplorer client:visible />
+    </div>
+
+    <!-- Scaffolding Hint (Single line, whitespace-nowrap) -->
+    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-2 rounded border border-zinc-800 bg-zinc-900/60 px-4 py-2.5 text-xs font-mono text-zinc-400">
+      <span>Scaffold default configuration:</span>
+      <div class="flex items-center gap-2">
+        <code class="rounded bg-zinc-950 border border-zinc-800 px-2 py-0.5 text-zinc-200 whitespace-nowrap">
+          tidy init
+        </code>
+        <span class="text-zinc-500 text-[11px]">→ ~/.config/tidy/config.toml</span>
+      </div>
+    </div>
+  </div>
+</section>
