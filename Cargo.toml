@@ -1,6 +1,6 @@
 [package]
 name = "tidy"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "A blazing-fast, zero-dependency, local-first file organizer and watcher for Linux and macOS."
 authors = ["tidy contributors"]

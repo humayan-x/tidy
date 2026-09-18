@@ -53,11 +53,11 @@ fn test_watch_detects_and_organizes_new_file() {
         .write_all(b"fake png data")
         .unwrap();
 
-    // Verify file is moved to Images/scenery.png
-    let img_dest = root.join("Images").join("scenery.png");
+    // Verify file is moved to Images/PNG/scenery.png
+    let img_dest = root.join("Images").join("PNG").join("scenery.png");
     assert!(
         wait_for_path(&img_dest, Duration::from_secs(5)),
-        "File should be organized into Images/scenery.png"
+        "File should be organized into Images/PNG/scenery.png"
     );
     assert!(!img_src.exists(), "Source file should have been moved");
 
@@ -105,17 +105,17 @@ fn test_watch_waits_for_download_completion() {
         temp_download.exists(),
         "Download in progress must not be moved"
     );
-    assert!(!root.join("Video").join("trailer.mp4").exists());
+    assert!(!root.join("Video").join("MP4").join("trailer.mp4").exists());
 
     // 2. Simulate browser completing download by renaming
     let final_file = root.join("trailer.mp4");
     fs::rename(&temp_download, &final_file).unwrap();
 
-    // Verify it is organized into Video/trailer.mp4
-    let video_dest = root.join("Video").join("trailer.mp4");
+    // Verify it is organized into Video/MP4/trailer.mp4
+    let video_dest = root.join("Video").join("MP4").join("trailer.mp4");
     assert!(
         wait_for_path(&video_dest, Duration::from_secs(5)),
-        "Finished download should be organized into Video/trailer.mp4"
+        "Finished download should be organized into Video/MP4/trailer.mp4"
     );
     assert!(!final_file.exists());
 
@@ -153,7 +153,7 @@ fn test_watch_collision_renaming() {
     let doc1 = root.join("report.pdf");
     File::create(&doc1).unwrap().write_all(b"doc v1").unwrap();
 
-    let dest1 = root.join("Documents").join("report.pdf");
+    let dest1 = root.join("Documents").join("PDF").join("report.pdf");
     assert!(
         wait_for_path(&dest1, Duration::from_secs(5)),
         "First report.pdf should be organized"
@@ -163,7 +163,7 @@ fn test_watch_collision_renaming() {
     let doc2 = root.join("report.pdf");
     File::create(&doc2).unwrap().write_all(b"doc v2").unwrap();
 
-    let dest2 = root.join("Documents").join("report (1).pdf");
+    let dest2 = root.join("Documents").join("PDF").join("report (1).pdf");
     assert!(
         wait_for_path(&dest2, Duration::from_secs(5)),
         "Collision should rename to report (1).pdf"
@@ -215,7 +215,7 @@ fn test_watch_non_recursive_skips_subdirectories() {
     // Wait 500ms: non-recursive watcher must not touch files in subdirectories
     thread::sleep(Duration::from_millis(500));
     assert!(sub_file.exists(), "Nested file should remain in subfolder");
-    assert!(!root.join("Images").join("nested.png").exists());
+    assert!(!root.join("Images").exists());
 
     shutdown.store(true, Ordering::SeqCst);
     handle.join().unwrap();
@@ -266,8 +266,12 @@ fn test_watch_initial_scan() {
     let planned = tidy::cli::run::scan_directory(&root, false, &classifier).unwrap();
     assert_eq!(planned.len(), 1);
     assert_eq!(planned[0].category, "Documents");
+    assert_eq!(
+        planned[0].proposed_dest,
+        root.join("Documents").join("PDF").join("pre_existing.pdf")
+    );
 
-    let dest = root.join("Documents").join("pre_existing.pdf");
+    let dest = planned[0].proposed_dest.clone();
     tidy::safety::mover::safe_move(&existing_doc, &dest, false).unwrap();
 
     assert!(dest.exists());

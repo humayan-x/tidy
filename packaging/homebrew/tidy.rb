@@ -1,7 +1,7 @@
 class Tidy < Formula
   desc "A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust"
   homepage "https://github.com/humayan-x/tidy"
-  version "0.1.0"
+  version "0.2.0"
   license "MIT"
 
   on_macos do

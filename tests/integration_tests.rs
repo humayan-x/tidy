@@ -56,12 +56,12 @@ fn test_single_run_organization() {
     assert!(!f_arc.exists());
     assert!(!f_code.exists());
 
-    // Verify files are sorted into appropriate category folders
-    assert!(root.join("Images").join("photo.jpg").exists());
-    assert!(root.join("Documents").join("contract.pdf").exists());
-    assert!(root.join("Audio").join("song.mp3").exists());
-    assert!(root.join("Archives").join("archive.tar.gz").exists());
-    assert!(root.join("Code").join("script.py").exists());
+    // Verify files are sorted into appropriate category and extension subfolders
+    assert!(root.join("Images").join("JPG").join("photo.jpg").exists());
+    assert!(root.join("Documents").join("PDF").join("contract.pdf").exists());
+    assert!(root.join("Audio").join("MP3").join("song.mp3").exists());
+    assert!(root.join("Archives").join("TAR.GZ").join("archive.tar.gz").exists());
+    assert!(root.join("Code").join("PY").join("script.py").exists());
 }
 
 #[test]

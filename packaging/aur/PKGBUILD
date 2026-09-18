@@ -1,6 +1,6 @@
 # Maintainer: tidy contributors <contributors@tidy.org>
 pkgname=tidy-bin
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc="A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust"
 arch=('x86_64')

@@ -35,9 +35,17 @@ pub struct Settings {
     /// Whether to scan or watch subdirectories recursively by default (default: false).
     #[serde(default)]
     pub recursive: bool,
+
+    /// Whether to organize files into extension-based subfolders, e.g. Documents/PDF (default: true).
+    #[serde(default = "default_nest_by_extension")]
+    pub nest_by_extension: bool,
 }
 
 fn default_ignore_hidden() -> bool {
+    true
+}
+
+fn default_nest_by_extension() -> bool {
     true
 }
 
@@ -58,6 +66,7 @@ impl Default for Settings {
             debounce_ms: default_debounce_ms(),
             stability_tick_ms: default_stability_tick_ms(),
             recursive: false,
+            nest_by_extension: default_nest_by_extension(),
         }
     }
 }
@@ -82,6 +91,9 @@ stability_tick_ms = 500
 
 # Whether to scan or watch subdirectories recursively (default: false)
 recursive = false
+
+# Whether to organize files into extension-based subfolders, e.g. Documents/PDF (default: true)
+nest_by_extension = true
 
 # Glob patterns for temporary downloads, editor swap files, and system indexes to skip
 ignore_patterns = [
@@ -203,6 +215,7 @@ impl Config {
             stability_tick_ms: self.settings.stability_tick_ms,
             extension_to_category,
             destinations: self.destinations.clone(),
+            nest_by_extension: self.settings.nest_by_extension,
         })
     }
 }
@@ -216,6 +229,7 @@ pub struct CompiledRules {
     pub stability_tick_ms: u64,
     pub extension_to_category: HashMap<String, String>,
     pub destinations: HashMap<String, String>,
+    pub nest_by_extension: bool,
 }
 
 impl CompiledRules {
@@ -251,6 +265,7 @@ mod tests {
         assert!(rules.is_ignored("file.crdownload"));
         assert!(!rules.is_ignored("photo.jpg"));
 
+        assert!(rules.nest_by_extension);
         assert_eq!(
             rules.extension_to_category.get("png").map(String::as_str),
             Some("Images")

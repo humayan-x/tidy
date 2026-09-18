@@ -133,7 +133,12 @@ impl Classifier {
         // 5. Match normalized extension against category tables
         if let Some(ref ext) = extension {
             if let Some(category) = self.rules.extension_to_category.get(ext) {
-                let target_subfolder = self.rules.get_destination_folder(category);
+                let category_folder = self.rules.get_destination_folder(category);
+                let target_subfolder = if self.rules.nest_by_extension {
+                    format!("{}/{}", category_folder, ext.to_uppercase())
+                } else {
+                    category_folder
+                };
                 let target_path = root_dir.join(&target_subfolder).join(file_name);
                 return ClassificationResult::Move {
                     category: category.clone(),
@@ -157,7 +162,12 @@ impl Classifier {
                 .or_else(|| sniffed.suggested_category.map(String::from));
 
             if let Some(category) = matched_category {
-                let target_subfolder = self.rules.get_destination_folder(&category);
+                let category_folder = self.rules.get_destination_folder(&category);
+                let target_subfolder = if self.rules.nest_by_extension {
+                    format!("{}/{}", category_folder, sniffed.extension.to_uppercase())
+                } else {
+                    category_folder
+                };
                 let target_path = root_dir.join(&target_subfolder).join(file_name);
                 return ClassificationResult::Move {
                     category,
@@ -198,11 +208,13 @@ mod tests {
             ClassificationResult::Move {
                 category,
                 target_subfolder,
+                target_path,
                 stem,
                 ..
             } => {
                 assert_eq!(category, "Images");
-                assert_eq!(target_subfolder, "Images");
+                assert_eq!(target_subfolder, "Images/JPG");
+                assert_eq!(target_path, Path::new("/downloads/Images/JPG/photo.jpg"));
                 assert_eq!(stem, "photo");
             }
             _ => panic!("Expected Move for photo.jpg"),
@@ -212,10 +224,14 @@ mod tests {
         match res {
             ClassificationResult::Move {
                 category,
+                target_subfolder,
+                target_path,
                 is_compound,
                 ..
             } => {
                 assert_eq!(category, "Archives");
+                assert_eq!(target_subfolder, "Archives/TAR.GZ");
+                assert_eq!(target_path, Path::new("/downloads/Archives/TAR.GZ/backup.tar.gz"));
                 assert!(is_compound);
             }
             _ => panic!("Expected Move for backup.tar.gz"),
@@ -305,13 +321,37 @@ mod tests {
         match res {
             ClassificationResult::Move {
                 category,
+                target_subfolder,
                 extension,
                 ..
             } => {
                 assert_eq!(category, "Images");
+                assert_eq!(target_subfolder, "Images/PNG");
                 assert_eq!(extension.as_deref(), Some("png"));
             }
             _ => panic!("Expected sniffing to classify image without extension"),
+        }
+    }
+
+    #[test]
+    fn test_classify_flat_mode_when_disabled() {
+        let mut config = Config::default();
+        config.settings.nest_by_extension = false;
+        let rules = config.compile().unwrap();
+        let classifier = Classifier::new(rules);
+        let root = Path::new("/downloads");
+
+        let res = classifier.classify(Path::new("/downloads/photo.jpg"), root);
+        match res {
+            ClassificationResult::Move {
+                target_subfolder,
+                target_path,
+                ..
+            } => {
+                assert_eq!(target_subfolder, "Images");
+                assert_eq!(target_path, Path::new("/downloads/Images/photo.jpg"));
+            }
+            _ => panic!("Expected Move for photo.jpg"),
         }
     }
 

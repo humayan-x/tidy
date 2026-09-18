@@ -13,8 +13,8 @@ const zlib = require('zlib');
 const { execSync } = require('child_process');
 
 const pkg = require('../package.json');
-// Download matching GitHub release binary (default to v0.1.0 or TIDY_VERSION override)
-const BINARY_VERSION = process.env.TIDY_VERSION || '0.1.0';
+// Download matching GitHub release binary (default to v0.2.0 or TIDY_VERSION override)
+const BINARY_VERSION = process.env.TIDY_VERSION || '0.2.0';
 const REPO = process.env.TIDY_REPO || 'humayan-x/tidy';
 
 function getTargetTriple() {

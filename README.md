@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://github.com/humayan-x/tidy/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen?style=flat-square&logo=githubactions" alt="CI Build Status" /></a>
   <a href="https://www.npmjs.com/package/@humayan-x/tidy"><img src="https://img.shields.io/npm/v/@humayan-x/tidy?style=flat-square&logo=npm&color=CB3837" alt="npm version" /></a>
-  <a href="https://github.com/humayan-x/tidy/releases"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=flat-square" alt="Version 0.1.0" /></a>
+  <a href="https://github.com/humayan-x/tidy/releases"><img src="https://img.shields.io/badge/version-0.2.0-blue?style=flat-square" alt="Version 0.2.0" /></a>
   <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue?style=flat-square" alt="License" /></a>
   <a href="https://www.rust-lang.org"><img src="https://img.shields.io/badge/rust-1.75%2B%20(2021)-orange?style=flat-square&logo=rust" alt="Rust 1.75+" /></a>
   <img src="https://img.shields.io/badge/platform-linux%20%7C%20macos-lightgrey?style=flat-square" alt="Platform" />
@@ -12,13 +12,14 @@
 
 > **A blazing-fast, zero-dependency, local-first file organizer and watcher in Rust for Linux and macOS.**
 
-`tidy` automatically scans and organizes cluttered directories (like your `Downloads` folder) into clean, predictable category hierarchies (Images, Documents, Audio, Video, Archives, Code/Data). It provides guaranteed non-destructive file operations, persistent undo rollbacks via an embedded SQLite transaction ledger, real-time filesystem event watching, and background service integration (`systemd --user` on Linux and `launchd` on macOS).
+`tidy` automatically scans and organizes cluttered directories (like your `Downloads` folder) into clean, predictable category hierarchies and extension subfolders (e.g. `Documents/PDF`, `Documents/XLSX`, `Images/PNG`, `Images/JPG`). It provides guaranteed non-destructive file operations, persistent undo rollbacks via an embedded SQLite transaction ledger, real-time filesystem event watching, and background service integration (`systemd --user` on Linux and `launchd` on macOS).
 
 ---
 
 ## Key Highlights
 
 - ⚡ **Blazing Fast**: Native compiled Rust with link-time optimization (LTO) producing a single `< 5 MB` static binary.
+- 🌳 **Hierarchical Tree Organization**: Groups files cleanly by category and extension subfolders (`Documents/PDF/`, `Images/PNG/`, `Archives/ZIP/`, `Code/PY/`).
 - 🔒 **Zero-Risk Non-Destructive Safety**:
   - **Predictable Collision Renaming**: Never overwrites existing files — appends standard incremental counters (`photo (1).jpg`, `archive (1).tar.gz`).
   - **Atomic Cross-Device Fallback**: Catches `EXDEV` across partition boundaries and executes staged atomic copy-and-verify before removing sources.
@@ -351,6 +352,9 @@ stability_tick_ms = 500
 
 # Whether to scan or watch subdirectories recursively
 recursive = false
+
+# Whether to organize files into extension-based subfolders (e.g. Documents/PDF, Images/PNG)
+nest_by_extension = true
 
 # Glob patterns to ignore
 ignore_patterns = [
