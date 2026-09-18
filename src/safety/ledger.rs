@@ -319,9 +319,9 @@ impl Ledger {
             [],
             |r| r.get(0),
         )?;
-        let total_operations: usize = self
-            .conn
-            .query_row("SELECT COUNT(*) FROM operations", [], |r| r.get(0))?;
+        let total_operations: usize =
+            self.conn
+                .query_row("SELECT COUNT(*) FROM operations", [], |r| r.get(0))?;
         let oldest_run: Option<String> = self
             .conn
             .query_row("SELECT MIN(timestamp) FROM runs", [], |r| r.get(0))
@@ -347,10 +347,9 @@ impl Ledger {
     /// Returns the number of pruned runs.
     pub fn prune_older_than(&mut self, days: u32) -> Result<usize> {
         let cutoff = (Utc::now() - chrono::Duration::days(days as i64)).to_rfc3339();
-        let deleted = self.conn.execute(
-            "DELETE FROM runs WHERE timestamp < ?1",
-            params![cutoff],
-        )?;
+        let deleted = self
+            .conn
+            .execute("DELETE FROM runs WHERE timestamp < ?1", params![cutoff])?;
 
         if deleted > 0 {
             self.conn.execute("VACUUM", [])?;

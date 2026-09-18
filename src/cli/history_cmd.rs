@@ -29,9 +29,21 @@ pub fn execute_history_cmd(args: &HistoryArgs) -> Result<()> {
             println!("  {:<12} {}", style("Database:").cyan(), db_path.display());
             println!("  {:<12} {}", style("Size:").cyan(), human_bytes(db_size));
             println!("  {:<12} {}", style("Total Runs:").cyan(), stats.total_runs);
-            println!("  {:<12} {}", style("Completed:").green(), stats.completed_runs);
-            println!("  {:<12} {}", style("Reverted:").yellow(), stats.reverted_runs);
-            println!("  {:<12} {}", style("Operations:").cyan(), stats.total_operations);
+            println!(
+                "  {:<12} {}",
+                style("Completed:").green(),
+                stats.completed_runs
+            );
+            println!(
+                "  {:<12} {}",
+                style("Reverted:").yellow(),
+                stats.reverted_runs
+            );
+            println!(
+                "  {:<12} {}",
+                style("Operations:").cyan(),
+                stats.total_operations
+            );
             if let Some(oldest) = stats.oldest_run {
                 println!("  {:<12} {}", style("Oldest Run:").dim(), oldest);
             }

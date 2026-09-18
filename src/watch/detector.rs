@@ -31,7 +31,11 @@ pub struct PendingFileTracker {
 impl PendingFileTracker {
     /// Creates a new tracker with specified stability criteria and zero grace period.
     pub fn new(required_stable_ticks: u32, max_tracking_duration: Duration) -> Self {
-        Self::new_with_grace_period(required_stable_ticks, max_tracking_duration, Duration::from_secs(0))
+        Self::new_with_grace_period(
+            required_stable_ticks,
+            max_tracking_duration,
+            Duration::from_secs(0),
+        )
     }
 
     /// Creates a new tracker with specified stability criteria and grace period.

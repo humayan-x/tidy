@@ -90,7 +90,10 @@ impl<'a> WatchGuard<'a> {
         }
 
         // 6. Check user-configured ignore patterns, exclusions, and hidden files
-        let rel_str = path.strip_prefix(self.root_dir).ok().and_then(|p| p.to_str());
+        let rel_str = path
+            .strip_prefix(self.root_dir)
+            .ok()
+            .and_then(|p| p.to_str());
         if self.rules.is_path_ignored(file_name, rel_str) {
             return GuardDecision::UserIgnored;
         }

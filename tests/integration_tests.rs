@@ -356,7 +356,10 @@ fn test_flat_mode_organization() {
     std::env::set_var("TIDY_STATE_DIR", root);
 
     let f_pdf = root.join("invoice.pdf");
-    File::create(&f_pdf).unwrap().write_all(b"%PDF-1.4").unwrap();
+    File::create(&f_pdf)
+        .unwrap()
+        .write_all(b"%PDF-1.4")
+        .unwrap();
 
     let args = RunArgs {
         path: Some(root.to_path_buf()),
@@ -370,7 +373,11 @@ fn test_flat_mode_organization() {
 
     // In flat mode, files go directly into Documents/invoice.pdf (not Documents/PDFs/invoice.pdf)
     assert!(root.join("Documents").join("invoice.pdf").exists());
-    assert!(!root.join("Documents").join("PDFs").join("invoice.pdf").exists());
+    assert!(!root
+        .join("Documents")
+        .join("PDFs")
+        .join("invoice.pdf")
+        .exists());
 }
 
 #[test]
@@ -381,8 +388,14 @@ fn test_exclude_flag_organization() {
 
     let f_pdf = root.join("invoice.pdf");
     let f_keep = root.join("keep.pdf");
-    File::create(&f_pdf).unwrap().write_all(b"%PDF-1.4").unwrap();
-    File::create(&f_keep).unwrap().write_all(b"%PDF-1.4").unwrap();
+    File::create(&f_pdf)
+        .unwrap()
+        .write_all(b"%PDF-1.4")
+        .unwrap();
+    File::create(&f_keep)
+        .unwrap()
+        .write_all(b"%PDF-1.4")
+        .unwrap();
 
     let args = RunArgs {
         path: Some(root.to_path_buf()),
@@ -395,7 +408,11 @@ fn test_exclude_flag_organization() {
     execute_run(&args, None).unwrap();
 
     // invoice.pdf moved, keep.pdf stayed in root
-    assert!(root.join("Documents").join("PDFs").join("invoice.pdf").exists());
+    assert!(root
+        .join("Documents")
+        .join("PDFs")
+        .join("invoice.pdf")
+        .exists());
     assert!(f_keep.exists());
 }
 
@@ -409,4 +426,3 @@ fn test_bin_name_usage_help() {
     assert!(help_text.contains("Usage: tidy [OPTIONS] <COMMAND>"));
     assert!(!help_text.contains("Usage: tidy-bin"));
 }
-

@@ -377,7 +377,11 @@ mod tests {
         // PDFs
         let res = classifier.classify(Path::new("/downloads/contract.pdf"), root);
         match res {
-            ClassificationResult::Move { category, target_subfolder, .. } => {
+            ClassificationResult::Move {
+                category,
+                target_subfolder,
+                ..
+            } => {
                 assert_eq!(category, "Documents");
                 assert_eq!(target_subfolder, "Documents/PDFs");
             }
@@ -388,7 +392,11 @@ mod tests {
         for name in &["memo.doc", "report.docx"] {
             let res = classifier.classify(Path::new(&format!("/downloads/{}", name)), root);
             match res {
-                ClassificationResult::Move { category, target_subfolder, .. } => {
+                ClassificationResult::Move {
+                    category,
+                    target_subfolder,
+                    ..
+                } => {
                     assert_eq!(category, "Documents");
                     assert_eq!(target_subfolder, "Documents/Word");
                 }
@@ -400,7 +408,11 @@ mod tests {
         for name in &["budget.xls", "sales.xlsx", "calc.ods"] {
             let res = classifier.classify(Path::new(&format!("/downloads/{}", name)), root);
             match res {
-                ClassificationResult::Move { category, target_subfolder, .. } => {
+                ClassificationResult::Move {
+                    category,
+                    target_subfolder,
+                    ..
+                } => {
                     assert_eq!(category, "Documents");
                     assert_eq!(target_subfolder, "Documents/Excel");
                 }
@@ -412,7 +424,11 @@ mod tests {
         for name in &["slides.ppt", "pitch.pptx"] {
             let res = classifier.classify(Path::new(&format!("/downloads/{}", name)), root);
             match res {
-                ClassificationResult::Move { category, target_subfolder, .. } => {
+                ClassificationResult::Move {
+                    category,
+                    target_subfolder,
+                    ..
+                } => {
                     assert_eq!(category, "Documents");
                     assert_eq!(target_subfolder, "Documents/PowerPoint");
                 }
@@ -442,7 +458,11 @@ mod tests {
         for (filename, expected_cat, expected_subfolder) in cases {
             let res = classifier.classify(Path::new(&format!("/downloads/{}", filename)), root);
             match res {
-                ClassificationResult::Move { category, target_subfolder, .. } => {
+                ClassificationResult::Move {
+                    category,
+                    target_subfolder,
+                    ..
+                } => {
                     assert_eq!(category, expected_cat);
                     assert_eq!(target_subfolder, expected_subfolder);
                 }

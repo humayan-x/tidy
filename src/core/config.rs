@@ -229,9 +229,17 @@ impl Config {
     /// Compiles this configuration into an optimized lookup structure for runtime classification.
     pub fn compile(&self) -> Result<CompiledRules> {
         let mut builder = GlobSetBuilder::new();
-        for pattern in self.settings.ignore_patterns.iter().chain(self.settings.exclude.iter()) {
+        for pattern in self
+            .settings
+            .ignore_patterns
+            .iter()
+            .chain(self.settings.exclude.iter())
+        {
             let glob = Glob::new(pattern).map_err(|e| {
-                TidyError::Config(format!("Invalid ignore/exclude glob pattern '{}': {}", pattern, e))
+                TidyError::Config(format!(
+                    "Invalid ignore/exclude glob pattern '{}': {}",
+                    pattern, e
+                ))
             })?;
             builder.add(glob);
         }
@@ -377,7 +385,11 @@ impl CompiledRules {
     pub fn resolve_target_subfolder(&self, category: &str, ext: &str) -> String {
         let category_folder = self.get_destination_folder(category);
         if self.nest_by_extension {
-            format!("{}/{}", category_folder, self.get_subfolder_for_extension(ext))
+            format!(
+                "{}/{}",
+                category_folder,
+                self.get_subfolder_for_extension(ext)
+            )
         } else {
             category_folder
         }
